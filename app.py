@@ -64,10 +64,11 @@ def utility_processor():
                 pid = getattr(product, 'product_id', None)
 
         if pid is not None:
-            prod_img_rel = f"images/products/product_{pid}.jpg"
-            prod_img_path = os.path.join(config.BASE_DIR, "static", prod_img_rel)
-            if os.path.exists(prod_img_path):
-                return url_for('static', filename=prod_img_rel)
+            for ext in ['jpg', 'jpeg', 'webp', 'png']:
+                prod_img_rel = f"images/products/product_{pid}.{ext}"
+                prod_img_path = os.path.join(config.BASE_DIR, "static", prod_img_rel)
+                if os.path.exists(prod_img_path):
+                    return url_for('static', filename=prod_img_rel)
 
         return None
 
@@ -721,10 +722,12 @@ def store_home():
     existing_pids = []
     if os.path.exists(prod_img_dir):
         for fname in os.listdir(prod_img_dir):
-            if fname.startswith("product_") and fname.endswith(".jpg"):
-                pid_str = fname[len("product_"):-len(".jpg")]
-                if pid_str.isdigit():
-                    existing_pids.append(int(pid_str))
+            if fname.startswith("product_"):
+                base, ext = os.path.splitext(fname)
+                if ext.lower() in [".jpg", ".jpeg", ".webp", ".png"]:
+                    pid_str = base[len("product_"):]
+                    if pid_str.isdigit():
+                        existing_pids.append(int(pid_str))
 
     featured_products = []
     if existing_pids:
