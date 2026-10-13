@@ -54,10 +54,6 @@
         <div class="product-image-container">
             <img src="{{ p_img }}" alt="{{ p.product_name }}" loading="lazy" class="product-image">
         </div>
-        {% else %}
-        <div class="product-image-placeholder">
-            <span class="placeholder-badge">Photo coming soon</span>
-        </div>
         {% endif %}
         <div class="store-card-content">
             <span class="store-card-category">{{ p.category }}</span>

@@ -707,76 +707,71 @@ def export_csv(dataset):
 # PUBLIC STOREFRONT (CUSTOMER-FACING FRONT-END) ROUTES
 # =============================================================================
 
+def get_verified_product_ids():
+    """
+    Returns list of product IDs with verified existing image files on disk.
+    The customer-facing storefront presentation layer exclusively displays
+    products that have valid, verified photos.
+    """
+    prod_img_dir = os.path.join(config.BASE_DIR, "static", "images", "products")
+    if not os.path.exists(prod_img_dir):
+        return []
+    pids = []
+    for fname in os.listdir(prod_img_dir):
+        if fname.startswith("product_"):
+            base, ext = os.path.splitext(fname)
+            if ext.lower() in [".jpg", ".jpeg", ".webp", ".png"]:
+                pid_str = base[len("product_"):]
+                if pid_str.isdigit():
+                    pids.append(int(pid_str))
+    return sorted(pids)
+
+
 @app.route('/store')
 def store_home():
     """Public Storefront Home: Banner, category list, featured products, top suppliers."""
+    verified_pids = get_verified_product_ids()
+    if not verified_pids:
+        return render_template(
+            'store_home.html',
+            store_page='home',
+            categories=[],
+            featured_products=[],
+            top_suppliers=[]
+        )
+
+    placeholders = ",".join("?" for _ in verified_pids)
+
     conn = sqlite3.connect(config.OPERATIONAL_DB_PATH)
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
 
-    cur.execute("SELECT DISTINCT category FROM PRODUCTS ORDER BY category")
+    cur.execute(f"SELECT DISTINCT category FROM PRODUCTS WHERE product_id IN ({placeholders}) ORDER BY category", verified_pids)
     categories = [r['category'] for r in cur.fetchall()]
 
-    # Featured products: show products with their own image first; if < 8, fill with top sellers
-    prod_img_dir = os.path.join(config.BASE_DIR, "static", "images", "products")
-    existing_pids = []
-    if os.path.exists(prod_img_dir):
-        for fname in os.listdir(prod_img_dir):
-            if fname.startswith("product_"):
-                base, ext = os.path.splitext(fname)
-                if ext.lower() in [".jpg", ".jpeg", ".webp", ".png"]:
-                    pid_str = base[len("product_"):]
-                    if pid_str.isdigit():
-                        existing_pids.append(int(pid_str))
+    # Featured products: strictly verified products, ordered by units sold, then product_id
+    cur.execute(f"""
+        SELECT p.*, s.supplier_name, COALESCE(SUM(sa.quantity), 0) AS units_sold
+        FROM PRODUCTS p
+        JOIN SUPPLIERS s ON p.supplier_id = s.supplier_id
+        LEFT JOIN ORDERS o ON p.product_id = o.product_id AND o.order_status = 'Delivered'
+        LEFT JOIN SALES sa ON o.order_id = sa.order_id
+        WHERE p.product_id IN ({placeholders})
+        GROUP BY p.product_id
+        ORDER BY units_sold DESC, p.product_id ASC
+        LIMIT 8
+    """, verified_pids)
+    featured_products = [dict(r) for r in cur.fetchall()]
 
-    featured_products = []
-    if existing_pids:
-        placeholders = ",".join("?" for _ in existing_pids)
-        cur.execute(f"""
-            SELECT p.*, s.supplier_name, COALESCE(SUM(sa.quantity), 0) AS units_sold
-            FROM PRODUCTS p
-            JOIN SUPPLIERS s ON p.supplier_id = s.supplier_id
-            LEFT JOIN ORDERS o ON p.product_id = o.product_id AND o.order_status = 'Delivered'
-            LEFT JOIN SALES sa ON o.order_id = sa.order_id
-            WHERE p.product_id IN ({placeholders})
-            GROUP BY p.product_id
-            ORDER BY units_sold DESC, p.product_id ASC
-            LIMIT 8
-        """, existing_pids)
-        featured_products = [dict(r) for r in cur.fetchall()]
-
-    if len(featured_products) < 8:
-        needed = 8 - len(featured_products)
-        exclude_pids = [p['product_id'] for p in featured_products]
-        exclude_clause = ""
-        params = []
-        if exclude_pids:
-            exclude_clause = f"WHERE p.product_id NOT IN ({','.join('?' for _ in exclude_pids)})"
-            params.extend(exclude_pids)
-        params.append(needed)
-
-        cur.execute(f"""
-            SELECT p.*, s.supplier_name, COALESCE(SUM(sa.quantity), 0) AS units_sold
-            FROM PRODUCTS p
-            JOIN SUPPLIERS s ON p.supplier_id = s.supplier_id
-            LEFT JOIN ORDERS o ON p.product_id = o.product_id AND o.order_status = 'Delivered'
-            LEFT JOIN SALES sa ON o.order_id = sa.order_id
-            {exclude_clause}
-            GROUP BY p.product_id
-            ORDER BY units_sold DESC, p.product_id ASC
-            LIMIT ?
-        """, params)
-        fillers = [dict(r) for r in cur.fetchall()]
-        featured_products.extend(fillers)
-
-    cur.execute("""
+    # Top suppliers: suppliers offering verified products, with product_count reflecting verified catalog items
+    cur.execute(f"""
         SELECT s.*, COUNT(p.product_id) AS product_count
         FROM SUPPLIERS s
-        LEFT JOIN PRODUCTS p ON s.supplier_id = p.supplier_id
+        JOIN PRODUCTS p ON s.supplier_id = p.supplier_id AND p.product_id IN ({placeholders})
         GROUP BY s.supplier_id
         ORDER BY s.supplier_rating DESC, s.supplier_name ASC
         LIMIT 6
-    """)
+    """, verified_pids)
     top_suppliers = [dict(r) for r in cur.fetchall()]
     conn.close()
 
@@ -798,19 +793,36 @@ def store_products():
     page = max(1, request.args.get('page', 1, type=int))
     per_page = 12
 
+    verified_pids = get_verified_product_ids()
+    if not verified_pids:
+        return render_template(
+            'store_products.html',
+            store_page='products',
+            products=[],
+            categories=[],
+            query=query,
+            selected_category=selected_category,
+            sort_order=sort_order,
+            page=1,
+            total_pages=1,
+            total_products=0
+        )
+
+    placeholders = ",".join("?" for _ in verified_pids)
+
     conn = sqlite3.connect(config.OPERATIONAL_DB_PATH)
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
 
-    cur.execute("SELECT DISTINCT category FROM PRODUCTS ORDER BY category")
+    cur.execute(f"SELECT DISTINCT category FROM PRODUCTS WHERE product_id IN ({placeholders}) ORDER BY category", verified_pids)
     categories = [r['category'] for r in cur.fetchall()]
 
-    sql_base = """
+    sql_base = f"""
         FROM PRODUCTS p
         JOIN SUPPLIERS s ON p.supplier_id = s.supplier_id
-        WHERE 1=1
+        WHERE p.product_id IN ({placeholders})
     """
-    params = []
+    params = list(verified_pids)
 
     if query:
         sql_base += " AND (p.product_name LIKE ? OR p.category LIKE ? OR s.supplier_name LIKE ?)"
@@ -860,6 +872,12 @@ def store_products():
 @app.route('/store/product/<int:product_id>')
 def store_product_detail(product_id):
     """Product detail page with supplier details (city, state, rating), price, stock, and more from supplier."""
+    verified_pids = get_verified_product_ids()
+    if product_id not in verified_pids:
+        return "Product not found", 404
+
+    placeholders = ",".join("?" for _ in verified_pids)
+
     conn = sqlite3.connect(config.OPERATIONAL_DB_PATH)
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
@@ -878,14 +896,14 @@ def store_product_detail(product_id):
 
     product = dict(row)
 
-    cur.execute("""
+    cur.execute(f"""
         SELECT p.*, s.supplier_name
         FROM PRODUCTS p
         JOIN SUPPLIERS s ON p.supplier_id = s.supplier_id
-        WHERE p.supplier_id = ? AND p.product_id != ?
+        WHERE p.supplier_id = ? AND p.product_id != ? AND p.product_id IN ({placeholders})
         ORDER BY p.product_id ASC
         LIMIT 4
-    """, (product['supplier_id'], product_id))
+    """, [product['supplier_id'], product_id] + verified_pids)
     more_products = [dict(r) for r in cur.fetchall()]
     conn.close()
 
@@ -901,18 +919,23 @@ def store_product_detail(product_id):
 def store_suppliers():
     """List of local suppliers with city, state, and rating."""
     query = request.args.get('q', '').strip()
+    verified_pids = get_verified_product_ids()
+    if not verified_pids:
+        return render_template('store_suppliers.html', store_page='suppliers', suppliers=[], query=query)
+
+    placeholders = ",".join("?" for _ in verified_pids)
 
     conn = sqlite3.connect(config.OPERATIONAL_DB_PATH)
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
 
-    sql = """
+    sql = f"""
         SELECT s.*, COUNT(p.product_id) AS product_count
         FROM SUPPLIERS s
-        LEFT JOIN PRODUCTS p ON s.supplier_id = p.supplier_id
+        JOIN PRODUCTS p ON s.supplier_id = p.supplier_id AND p.product_id IN ({placeholders})
         WHERE 1=1
     """
-    params = []
+    params = list(verified_pids)
     if query:
         sql += " AND (s.supplier_name LIKE ? OR s.city LIKE ? OR s.state LIKE ?)"
         wildcard = f"%{query}%"
@@ -935,6 +958,7 @@ def store_suppliers():
 @app.route('/store/supplier/<int:supplier_id>')
 def store_supplier_detail(supplier_id):
     """Supplier profile with their products."""
+    verified_pids = get_verified_product_ids()
     conn = sqlite3.connect(config.OPERATIONAL_DB_PATH)
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
@@ -947,14 +971,18 @@ def store_supplier_detail(supplier_id):
 
     supplier = dict(row)
 
-    cur.execute("""
-        SELECT p.*, s.supplier_name
-        FROM PRODUCTS p
-        JOIN SUPPLIERS s ON p.supplier_id = s.supplier_id
-        WHERE p.supplier_id = ?
-        ORDER BY p.product_name ASC
-    """, (supplier_id,))
-    products = [dict(r) for r in cur.fetchall()]
+    if verified_pids:
+        placeholders = ",".join("?" for _ in verified_pids)
+        cur.execute(f"""
+            SELECT p.*, s.supplier_name
+            FROM PRODUCTS p
+            JOIN SUPPLIERS s ON p.supplier_id = s.supplier_id
+            WHERE p.supplier_id = ? AND p.product_id IN ({placeholders})
+            ORDER BY p.product_name ASC
+        """, [supplier_id] + verified_pids)
+        products = [dict(r) for r in cur.fetchall()]
+    else:
+        products = []
     conn.close()
 
     return render_template(
