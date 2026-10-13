@@ -1,0 +1,477 @@
+{% extends 'base.html' %}
+{% block title %}Analytical SQL Suite{% endblock %}
+{% block page_heading %}Analytical SQL Query Suite (15 Queries){% endblock %}
+{% block page_subheading %}Execution of DWM syllabus analytical queries over FACT_SALES and dimension tables{% endblock %}
+
+{% block top_actions %}
+<a href="{{ url_for('export_csv', dataset='sales') }}" class="btn btn-outline">Export Sales CSV</a>
+{% endblock %}
+
+{% block content %}
+<!-- Parameterized Filter Panel -->
+<div class="filter-panel">
+    <form method="GET" action="{{ url_for('analytics') }}" class="filter-form">
+        <div class="filter-group">
+            <label for="year">Calendar Year</label>
+            <select name="year" id="year">
+                <option value="">All Historical Years</option>
+                {% for y in filter_opts.years %}
+                <option value="{{ y }}" {% if filters.year == y|string %}selected{% endif %}>{{ y }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="category">Category</label>
+            <select name="category" id="category">
+                <option value="">All Categories</option>
+                {% for c in filter_opts.categories %}
+                <option value="{{ c }}" {% if filters.category == c %}selected{% endif %}>{{ c }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="supplier_id">Supplier</label>
+            <select name="supplier_id" id="supplier_id">
+                <option value="">All Suppliers</option>
+                {% for s in filter_opts.suppliers %}
+                <option value="{{ s.supplier_id }}" {% if filters.supplier_id == s.supplier_id|string %}selected{% endif %}>{{ s.supplier_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="state">State</label>
+            <select name="state" id="state">
+                <option value="">All States</option>
+                {% for st in filter_opts.states %}
+                <option value="{{ st }}" {% if filters.state == st %}selected{% endif %}>{{ st }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-actions">
+            <button type="submit" class="btn btn-primary">Run Parameterized SQL</button>
+            <a href="{{ url_for('analytics') }}" class="btn btn-outline">Reset</a>
+        </div>
+    </form>
+</div>
+
+<!-- Core Aggregate KPIs (Queries 1, 2, 3, 10) -->
+<div class="kpi-grid">
+    <div class="kpi-card">
+        <div class="kpi-label">Query 1: Total Revenue</div>
+        <div class="kpi-value">{{ queries.total_revenue.formatted }}</div>
+        <div class="kpi-subtext">{{ queries.total_revenue.purpose }}</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Query 2: Total Settled Orders</div>
+        <div class="kpi-value">{{ queries.total_orders.formatted }}</div>
+        <div class="kpi-subtext">{{ queries.total_orders.purpose }}</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Query 3: Total Net Profit</div>
+        <div class="kpi-value">{{ queries.total_profit.formatted }}</div>
+        <div class="kpi-subtext">Net Margin: {{ queries.total_profit.margin_pct }}%</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Query 10: Average Order Value</div>
+        <div class="kpi-value">{{ queries.average_order_value.formatted }}</div>
+        <div class="kpi-subtext">Range: ₹{{ '{:,.0f}'.format(queries.average_order_value.min) }} - ₹{{ '{:,.0f}'.format(queries.average_order_value.max) }}</div>
+    </div>
+</div>
+
+<!-- Query 4: Monthly Sales Trend -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>Query 4: {{ queries.monthly_sales.title }}</h3>
+            <p>{{ queries.monthly_sales.purpose }}</p>
+        </div>
+    </div>
+    <div class="card-body">
+        <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ queries.monthly_sales.sql }}</pre>
+</details>
+        <div class="table-responsive" style="max-height: 250px; overflow-y:auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Month</th>
+                        <th class="text-right">Transactions</th>
+                        <th class="text-right">Monthly Revenue</th>
+                        <th class="text-right">Monthly Net Profit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in queries.monthly_sales.data %}
+                    <tr>
+                        <td>{{ r.year }}</td>
+                        <td>{{ r.month_name }}</td>
+                        <td class="text-right">{{ r.transactions_count }}</td>
+                        <td class="text-right"><strong>₹{{ '{:,.2f}'.format(r.monthly_revenue) }}</strong></td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(r.monthly_profit) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="grid-2">
+    <!-- Query 5: Top 5 Products -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>Query 5: {{ queries.top_5_products.title }}</h3>
+                <p>{{ queries.top_5_products.purpose }}</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ queries.top_5_products.sql }}</pre>
+</details>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th class="text-right">Units</th>
+                        <th class="text-right">Revenue</th>
+                        <th class="text-right">Margin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in queries.top_5_products.data %}
+                    <tr>
+                        <td><strong>{{ r.product_name }}</strong></td>
+                        <td><span class="badge">{{ r.category }}</span></td>
+                        <td class="text-right">{{ r.total_units_sold }}</td>
+                        <td class="text-right"><strong>₹{{ '{:,.2f}'.format(r.revenue) }}</strong></td>
+                        <td class="text-right">{{ r.margin_pct }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Query 6: Category-wise Sales -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>Query 6: {{ queries.category_sales.title }}</h3>
+                <p>{{ queries.category_sales.purpose }}</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ queries.category_sales.sql }}</pre>
+</details>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th class="text-right">Sales Count</th>
+                        <th class="text-right">Units</th>
+                        <th class="text-right">Total Revenue</th>
+                        <th class="text-right">Margin %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in queries.category_sales.data %}
+                    <tr>
+                        <td><strong>{{ r.category }}</strong></td>
+                        <td class="text-right">{{ r.total_sales_count }}</td>
+                        <td class="text-right">{{ r.units_sold }}</td>
+                        <td class="text-right"><strong>₹{{ '{:,.2f}'.format(r.category_revenue) }}</strong></td>
+                        <td class="text-right">{{ r.margin_pct }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="grid-2">
+    <!-- Query 7: Supplier Revenue -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>Query 7: {{ queries.supplier_revenue.title }}</h3>
+                <p>{{ queries.supplier_revenue.purpose }}</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ queries.supplier_revenue.sql }}</pre>
+</details>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Supplier</th>
+                        <th>City</th>
+                        <th class="text-right">Orders</th>
+                        <th class="text-right">Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in queries.supplier_revenue.data[:6] %}
+                    <tr>
+                        <td><strong>{{ r.supplier_name }}</strong></td>
+                        <td>{{ r.city }}</td>
+                        <td class="text-right">{{ r.orders_fulfilled }}</td>
+                        <td class="text-right"><strong>₹{{ '{:,.2f}'.format(r.supplier_revenue) }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Query 8: Customer Spending -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>Query 8: {{ queries.customer_spending.title }}</h3>
+                <p>{{ queries.customer_spending.purpose }}</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ queries.customer_spending.sql }}</pre>
+</details>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>City</th>
+                        <th class="text-right">Orders</th>
+                        <th class="text-right">Total Spent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in queries.customer_spending.data[:6] %}
+                    <tr>
+                        <td><strong>{{ r.customer_name }}</strong></td>
+                        <td>{{ r.city }}</td>
+                        <td class="text-right">{{ r.total_orders }}</td>
+                        <td class="text-right"><strong>₹{{ '{:,.2f}'.format(r.total_spent) }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Query 9: Order Status Distribution -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>Query 9: {{ queries.order_status_distribution.title }}</h3>
+            <p>{{ queries.order_status_distribution.purpose }}</p>
+        </div>
+    </div>
+    <div class="card-body">
+        <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ queries.order_status_distribution.sql }}</pre>
+</details>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            {% for r in queries.order_status_distribution.data %}
+            <div style="flex:1; min-width:130px; border:1px solid var(--border-color); border-radius:var(--radius); padding:10px; text-align:center;">
+                <span class="badge badge-{{ r.order_status|lower }}">{{ r.order_status }}</span>
+                <div style="font-size:1.15rem; font-weight:700; margin-top:4px;">{{ r.status_count }}</div>
+                <small style="color:var(--text-muted);">{{ r.percentage }}% of orders</small>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Additional Queries 11 - 15 -->
+<div class="card-header" style="background:var(--bg-main); border:1px solid var(--border-color); border-radius:var(--radius); margin:24px 0 14px;">
+    <h3>Advanced Analytical Queries (11 to 15)</h3>
+</div>
+
+<div class="grid-2">
+    <!-- Query 11: MoM Growth -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>Query 11: {{ queries.mom_growth.title }}</h3>
+                <p>{{ queries.mom_growth.purpose }}</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ queries.mom_growth.sql }}</pre>
+</details>
+            <div class="table-responsive" style="max-height:220px; overflow-y:auto;">
+                <table class="data-table">
+                    <thead><tr><th>Period</th><th class="text-right">Current Rev</th><th class="text-right">Prior Rev</th><th class="text-right">MoM Growth</th></tr></thead>
+                    <tbody>
+                        {% for r in queries.mom_growth.data %}
+                        <tr>
+                            <td>{{ r.year }}-{{ '%02d'|format(r.month) }}</td>
+                            <td class="text-right">₹{{ '{:,.0f}'.format(r.current_revenue) }}</td>
+                            <td class="text-right">{% if r.previous_revenue %}₹{{ '{:,.0f}'.format(r.previous_revenue) }}{% else %}&mdash;{% endif %}</td>
+                            <td class="text-right">
+                                {% if r.mom_growth_pct is not none %}
+                                    {% if r.mom_growth_pct > 0 %}
+                                    +{{ r.mom_growth_pct }}%
+                                    {% else %}
+                                    {{ r.mom_growth_pct }}%
+                                    {% endif %}
+                                {% else %}&mdash;{% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Query 12: Margin Ranking -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>Query 12: {{ queries.category_profit_margin.title }}</h3>
+                <p>{{ queries.category_profit_margin.purpose }}</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ queries.category_profit_margin.sql }}</pre>
+</details>
+            <table class="data-table">
+                <thead><tr><th>Category</th><th class="text-right">Revenue</th><th class="text-right">Profit</th><th class="text-right">Profit Margin %</th></tr></thead>
+                <tbody>
+                    {% for r in queries.category_profit_margin.data %}
+                    <tr>
+                        <td><strong>{{ r.category }}</strong></td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(r.revenue) }}</td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(r.net_profit) }}</td>
+                        <td class="text-right">{{ r.profit_margin_pct }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="grid-2">
+    <!-- Query 13: Top Suppliers Profit -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>Query 13: {{ queries.top_suppliers_profit.title }}</h3>
+                <p>{{ queries.top_suppliers_profit.purpose }}</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ queries.top_suppliers_profit.sql }}</pre>
+</details>
+            <table class="data-table">
+                <thead><tr><th>Supplier</th><th class="text-center">Rating</th><th class="text-right">Net Profit</th><th class="text-right">Orders</th></tr></thead>
+                <tbody>
+                    {% for r in queries.top_suppliers_profit.data %}
+                    <tr>
+                        <td><strong>{{ r.supplier_name }}</strong></td>
+                        <td class="text-center">{{ r.rating }} / 5.0</td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(r.net_profit_generated) }}</td>
+                        <td class="text-right">{{ r.orders_handled }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Query 14: Top Cities Revenue -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>Query 14: {{ queries.top_cities_revenue.title }}</h3>
+                <p>{{ queries.top_cities_revenue.purpose }}</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ queries.top_cities_revenue.sql }}</pre>
+</details>
+            <table class="data-table">
+                <thead><tr><th>City &amp; State</th><th class="text-right">Buyers</th><th class="text-right">Orders</th><th class="text-right">Revenue</th></tr></thead>
+                <tbody>
+                    {% for r in queries.top_cities_revenue.data[:6] %}
+                    <tr>
+                        <td><strong>{{ r.city }}</strong>, {{ r.state }}</td>
+                        <td class="text-right">{{ r.customer_count }}</td>
+                        <td class="text-right">{{ r.orders_count }}</td>
+                        <td class="text-right"><strong>₹{{ '{:,.2f}'.format(r.total_revenue) }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Query 15: Cancellation Rate Scorecard -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>Query 15: {{ queries.supplier_risk_rates.title }}</h3>
+            <p>{{ queries.supplier_risk_rates.purpose }}</p>
+        </div>
+    </div>
+    <div class="card-body">
+        <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ queries.supplier_risk_rates.sql }}</pre>
+</details>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Supplier</th>
+                        <th class="text-center">Rating</th>
+                        <th class="text-right">Assigned Orders</th>
+                        <th class="text-right">Delivered</th>
+                        <th class="text-right">Cancelled</th>
+                        <th class="text-right">Returned</th>
+                        <th class="text-right">Cancellation %</th>
+                        <th class="text-right">Return %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in queries.supplier_risk_rates.data %}
+                    <tr>
+                        <td><strong>{{ r.supplier_name }}</strong></td>
+                        <td class="text-center">{{ r.rating }} / 5.0</td>
+                        <td class="text-right">{{ r.total_orders_assigned }}</td>
+                        <td class="text-right">{{ r.delivered_count }}</td>
+                        <td class="text-right">{{ r.cancelled_count }}</td>
+                        <td class="text-right">{{ r.returned_count }}</td>
+                        <td class="text-right">
+                            {% if r.cancellation_rate_pct > 8.0 %}
+                            <span class="badge badge-cancelled">{{ r.cancellation_rate_pct }}% (High)</span>
+                            {% else %}
+                            <span class="badge">{{ r.cancellation_rate_pct }}%</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-right">{{ r.return_rate_pct }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

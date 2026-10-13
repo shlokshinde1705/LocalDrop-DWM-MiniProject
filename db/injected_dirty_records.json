@@ -1,0 +1,7 @@
+{
+    "duplicate_orders": 15,
+    "null_order_statuses": 12,
+    "negative_quantities": 8,
+    "bad_date_formats": 6,
+    "out_of_range_ratings": 4
+}

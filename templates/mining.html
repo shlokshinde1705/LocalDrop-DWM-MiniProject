@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+{% block title %}Data Mining Engine{% endblock %}
+{% block page_heading %}Data Mining & Machine Learning Suite{% endblock %}
+{% block page_subheading %}Classification (Decision Tree & Naive Bayes), K-Means Clustering, and Apriori Association Rules{% endblock %}
+
+{% block top_actions %}
+<a href="{{ url_for('export_csv', dataset='apriori_rules') }}" class="btn btn-outline">Export Association Rules CSV</a>
+<a href="{{ url_for('export_csv', dataset='customer_clusters') }}" class="btn btn-outline">Export Clusters CSV</a>
+{% endblock %}
+
+{% block content %}
+<!-- =========================================================================
+     PART A: SUPERVISED CLASSIFICATION
+     ========================================================================= -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>Part A: Order Profitability Prediction (Classification)</h3>
+            <p>Target: High-Profit Order Classification (Net Profit &ge; Median ₹{{ '{:,.2f}'.format(classification.median_profit) }})</p>
+        </div>
+    </div>
+    <div class="card-body">
+        <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:14px;">
+            Classifies orders into high-profit and standard-profit tiers using product pricing, order volume, category, seasonality, and supplier rating.
+        </p>
+
+        <!-- Key Profitability Drivers -->
+        <h4 style="font-size:0.88rem; margin-bottom:8px; color:var(--text-primary);">1. Key Profitability Drivers (Feature Importance)</h4>
+        <div class="table-responsive" style="margin-bottom:18px;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Business Attribute</th>
+                        <th class="text-right">Relevance Score</th>
+                        <th>Relative Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in classification.relevance_ranking %}
+                    <tr>
+                        <td><code>{{ r.feature }}</code></td>
+                        <td class="text-right"><strong>{{ r.importance_score }}</strong></td>
+                        <td>
+                            <div style="background:#e2e8f0; border-radius:2px; height:6px; width:180px; overflow:hidden;">
+                                <div style="background:var(--primary); height:100%; width:{{ (r.importance_score / classification.relevance_ranking[0].importance_score) * 100 }}%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Model Comparison Table -->
+        <h4 style="font-size:0.88rem; margin-bottom:8px; color:var(--text-primary);">2. Model Comparison: Decision Tree vs. Naive Bayes</h4>
+        <div class="table-responsive" style="margin-bottom:18px;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th class="text-right">Accuracy</th>
+                        <th class="text-right">Precision</th>
+                        <th class="text-right">Recall</th>
+                        <th class="text-right">F1-Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Decision Tree Classifier</strong></td>
+                        <td class="text-right"><strong>{{ classification.decision_tree.metrics.accuracy }}%</strong></td>
+                        <td class="text-right">{{ classification.decision_tree.metrics.precision }}%</td>
+                        <td class="text-right">{{ classification.decision_tree.metrics.recall }}%</td>
+                        <td class="text-right">{{ classification.decision_tree.metrics.f1_score }}%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gaussian Naive Bayes</strong></td>
+                        <td class="text-right"><strong>{{ classification.naive_bayes.metrics.accuracy }}%</strong></td>
+                        <td class="text-right">{{ classification.naive_bayes.metrics.precision }}%</td>
+                        <td class="text-right">{{ classification.naive_bayes.metrics.recall }}%</td>
+                        <td class="text-right">{{ classification.naive_bayes.metrics.f1_score }}%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="insight-callout">
+            <strong>Prediction Summary:</strong> {{ classification.interpretation }}
+        </div>
+    </div>
+</div>
+
+<!-- =========================================================================
+     PART B: UNSUPERVISED CLUSTERING (K-MEANS)
+     ========================================================================= -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>Part B: Customer Segmentation (K-Means Clustering)</h3>
+            <p>Customer accounts grouped into 3 segments by order frequency and lifetime spend</p>
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- Customer Segments Table -->
+        <h4 style="font-size:0.88rem; margin-bottom:8px; color:var(--text-primary);">1. Customer Segments and Purchasing Profiles</h4>
+        <div class="table-responsive" style="margin-bottom:18px;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Customer Segment</th>
+                        <th class="text-right">Customers</th>
+                        <th class="text-right">Share (%)</th>
+                        <th class="text-right">Avg. Orders</th>
+                        <th class="text-right">Avg. Lifetime Spend</th>
+                        <th class="text-right">Spend Range</th>
+                        <th>Recommended Business Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cp in clustering.cluster_profiles %}
+                    <tr>
+                        <td>
+                            <span class="badge">
+                                Segment {{ cp.assigned_cluster_id }}: {{ cp.title }}
+                            </span>
+                        </td>
+                        <td class="text-right"><strong>{{ cp.count }}</strong></td>
+                        <td class="text-right">{{ cp.percentage }}%</td>
+                        <td class="text-right">{{ cp.centroid_orders }}</td>
+                        <td class="text-right"><strong>₹{{ '{:,.2f}'.format(cp.centroid_spending) }}</strong></td>
+                        <td class="text-right">₹{{ '{:,.0f}'.format(cp.min_spend) }} - ₹{{ '{:,.0f}'.format(cp.max_spend) }}</td>
+                        <td><small>{{ cp.suggested_action }}</small></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Scatter Plot -->
+        <h4 style="font-size:0.88rem; margin-bottom:8px; color:var(--text-primary);">2. Customer Distribution by Orders and Spend</h4>
+        <canvas id="clusterScatter" height="120"></canvas>
+    </div>
+</div>
+
+<!-- =========================================================================
+     PART C: ASSOCIATION RULE MINING (APRIORI)
+     ========================================================================= -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>Part C: Frequently Purchased Product Combinations (Apriori)</h3>
+            <p>Co-purchased product associations across {{ association.total_baskets_analyzed }} customer orders</p>
+        </div>
+        <span class="badge">{{ association.total_rules_discovered }} Rules Discovered</span>
+    </div>
+    <div class="card-body">
+        <!-- Highlight Explanation Callout -->
+        <div class="insight-callout" style="margin-bottom:18px;">
+            {{ association.highlighted_explanation }}
+        </div>
+
+        <!-- Top Rules Bar Chart -->
+        <h4 style="font-size:0.88rem; margin-bottom:8px; color:var(--text-primary);">Top Product Associations Ranked by Lift</h4>
+        <canvas id="aprioriChart" height="130" style="margin-bottom:18px;"></canvas>
+
+        <!-- Association Rules Table -->
+        <h4 style="font-size:0.88rem; margin-bottom:8px; color:var(--text-primary);">Product Association Rules</h4>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th class="text-center">Rank</th>
+                        <th>When Purchased (IF)</th>
+                        <th>Frequently Bought With (THEN)</th>
+                        <th class="text-right">Support</th>
+                        <th class="text-right">Confidence</th>
+                        <th class="text-right">Lift</th>
+                        <th class="text-center">Association Strength</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in association.rules %}
+                    <tr>
+                        <td class="text-center">#{{ r.rank }}</td>
+                        <td><code>{{ r.antecedent }}</code></td>
+                        <td><strong>{{ r.consequent }}</strong></td>
+                        <td class="text-right">{{ r.support_pct }}</td>
+                        <td class="text-right">{{ r.confidence_pct }}</td>
+                        <td class="text-right"><strong>{{ r.lift }}x</strong></td>
+                        <td class="text-center">
+                            {% if r.lift > 2.0 %}
+                            <span class="badge">Strong</span>
+                            {% else %}
+                            <span class="badge">Moderate</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Cluster Scatter Plot
+    const pts = {{ clustering.scatter_points|tojson }};
+    const cColors = { 1: '#1e40af', 2: '#2563eb', 3: '#64748b' };
+    const datasets = [1, 2, 3].map(cid => {
+        const sub = pts.filter(p => p.cluster_id === cid);
+        return {
+            label: `Cluster ${cid}`,
+            data: sub.map(p => ({ x: p.x, y: p.y })),
+            backgroundColor: cColors[cid],
+            pointRadius: 3
+        };
+    });
+
+    new Chart(document.getElementById('clusterScatter'), {
+        type: 'scatter',
+        data: { datasets: datasets },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'top' } },
+            scales: {
+                x: {
+                    title: { display: true, text: 'Total Orders' },
+                    grid: { color: '#f1f5f9' }
+                },
+                y: {
+                    title: { display: true, text: 'Lifetime Spending (₹)' },
+                    grid: { color: '#f1f5f9' }
+                }
+            }
+        }
+    });
+
+    // 3. Apriori Bar Chart
+    const rChartData = {{ association.top_rules_chart|tojson }};
+    new Chart(document.getElementById('aprioriChart'), {
+        type: 'bar',
+        data: {
+            labels: rChartData.map(d => d.label),
+            datasets: [{
+                label: 'Lift Multiplier',
+                data: rChartData.map(d => d.lift),
+                backgroundColor: '#2563eb',
+                borderRadius: 2
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Lift' },
+                    grid: { color: '#f1f5f9' }
+                },
+                y: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

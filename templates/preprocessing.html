@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% block title %}Data Preprocessing{% endblock %}
+{% block page_heading %}Data Preprocessing & Quality Suite{% endblock %}
+{% block page_subheading %}Cleansing pipeline evaluating missing values, deduplication, date conformance, and IQR outliers{% endblock %}
+
+{% block content %}
+<!-- Data Quality Metric Cards -->
+<div class="kpi-grid">
+    <div class="kpi-card">
+        <div class="kpi-label">Raw Orders Audited</div>
+        <div class="kpi-value">{{ report.summary.total_raw_orders }}</div>
+        <div class="kpi-subtext">Extracted from operational database</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Clean Orders Conformed</div>
+        <div class="kpi-value">{{ report.summary.total_clean_orders }}</div>
+        <div class="kpi-subtext">{{ report.summary.total_raw_orders - report.summary.total_clean_orders }} invalid rows filtered</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Duplicates Removed</div>
+        <div class="kpi-value">{{ report.summary.duplicates_purged }}</div>
+        <div class="kpi-subtext">Redundant transactional rows</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Statistical Outliers Flagged</div>
+        <div class="kpi-value">{{ report.summary.outliers_flagged }}</div>
+        <div class="kpi-subtext">IQR method [Q1 - 1.5*IQR, Q3 + 1.5*IQR]</div>
+    </div>
+</div>
+
+<!-- Comparison Summary: Before vs After Cleansing -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>Pre- and Post-Cleansing Parity Audit</h3>
+            <p>Verification of anomaly detection and schema validation</p>
+        </div>
+    </div>
+    <div class="card-body" style="padding: 0;">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Operational Table</th>
+                        <th class="text-right">Before: Raw Rows</th>
+                        <th>Before: Issues Detected</th>
+                        <th>Transformation Method</th>
+                        <th class="text-right">After: Clean Rows</th>
+                        <th class="text-center">Quality Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>CUSTOMERS</code></td>
+                        <td class="text-right">{{ report.before_metrics.CUSTOMERS.rows }}</td>
+                        <td>{{ report.before_metrics.CUSTOMERS.nulls }} missing values</td>
+                        <td>Deduplication &amp; string whitespace trimming</td>
+                        <td class="text-right"><strong>{{ report.after_metrics.CUSTOMERS.rows }}</strong></td>
+                        <td class="text-center"><span class="badge">Cleaned ({{ report.after_metrics.CUSTOMERS.rows }} rows)</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>SUPPLIERS</code></td>
+                        <td class="text-right">{{ report.before_metrics.SUPPLIERS.rows }}</td>
+                        <td>{{ report.before_metrics.SUPPLIERS.out_of_range_ratings }} out-of-range ratings</td>
+                        <td>Numeric bounds validation: Clamped to [1.0, 5.0]</td>
+                        <td class="text-right"><strong>{{ report.after_metrics.SUPPLIERS.rows }}</strong></td>
+                        <td class="text-center"><span class="badge">Cleaned ({{ report.after_metrics.SUPPLIERS.rows }} rows)</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>PRODUCTS</code></td>
+                        <td class="text-right">{{ report.before_metrics.PRODUCTS.rows }}</td>
+                        <td>0 defects</td>
+                        <td>SKU validation and category normalization</td>
+                        <td class="text-right"><strong>{{ report.after_metrics.PRODUCTS.rows }}</strong></td>
+                        <td class="text-center"><span class="badge">Validated ({{ report.after_metrics.PRODUCTS.rows }} rows)</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>ORDERS</code></td>
+                        <td class="text-right">{{ report.before_metrics.ORDERS.rows }}</td>
+                        <td>
+                            {{ report.summary.duplicates_purged }} duplicate rows,<br>
+                            {{ report.summary.nulls_handled }} null statuses,<br>
+                            {{ report.summary.invalid_quantities_removed }} negative quantities
+                        </td>
+                        <td>
+                            Deduplicate, drop nulls in required fields,<br>
+                            standardize date format, filter quantity &gt; 0
+                        </td>
+                        <td class="text-right"><strong>{{ report.after_metrics.ORDERS.rows }}</strong></td>
+                        <td class="text-center"><span class="badge">Cleaned ({{ report.after_metrics.ORDERS.rows }} rows)</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>SALES</code></td>
+                        <td class="text-right">{{ report.before_metrics.SALES.rows }}</td>
+                        <td>Orphan line items matching invalid orders</td>
+                        <td>Referential integrity validation and monetary reconciliation</td>
+                        <td class="text-right"><strong>{{ report.after_metrics.SALES.rows }}</strong></td>
+                        <td class="text-center"><span class="badge">Reconciled ({{ report.after_metrics.SALES.rows }} rows)</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Sample Dirty Records BEFORE Cleaning -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>Sample Operational Anomalies Detected (Before Cleansing)</h3>
+            <p>Entries identified during initial ingestion</p>
+        </div>
+    </div>
+    <div class="card-body" style="padding: 0;">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr><th>Source Entity</th><th>Record ID</th><th>Target Field</th><th>Raw Dirty Value</th><th>Detected Issue</th><th>Cleansing Action</th></tr>
+                </thead>
+                <tbody>
+                    {% for d in report.dirty_samples %}
+                    <tr>
+                        <td><code>{{ d.stage }}</code></td>
+                        <td>#{{ d.record_id }}</td>
+                        <td><code>{{ d.field }}</code></td>
+                        <td><span class="badge">{{ d.raw_value }}</span></td>
+                        <td>{{ d.issue }}</td>
+                        <td>{{ d.action }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Sample Conformed Clean Records AFTER Cleaning -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>Sample Cleansed Warehouse Records (After Cleansing)</h3>
+            <p>Conformed records with standardized dates, currency values, and derived metrics</p>
+        </div>
+    </div>
+    <div class="card-body" style="padding: 0;">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Sale ID</th>
+                        <th>Order ID</th>
+                        <th>Settlement Date</th>
+                        <th class="text-right">Quantity</th>
+                        <th class="text-right">Unit Price</th>
+                        <th class="text-right">Total Revenue</th>
+                        <th class="text-right">Net Profit</th>
+                        <th class="text-right">Profit Margin %</th>
+                        <th class="text-center">Tier</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in report.cleaned_samples %}
+                    <tr>
+                        <td><code>#SL-{{ c.sale_id }}</code></td>
+                        <td>#ORD-{{ c.order_id }}</td>
+                        <td>{{ c.sale_date }}</td>
+                        <td class="text-right">{{ c.quantity }}</td>
+                        <td class="text-right">{{ c.unit_price }}</td>
+                        <td class="text-right"><strong>{{ c.total_amount }}</strong></td>
+                        <td class="text-right">{{ c.profit }}</td>
+                        <td class="text-right">{{ c.margin_pct }}</td>
+                        <td class="text-center"><span class="badge">{{ c.tier }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Step-by-Step Transformation Pipeline Audit -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>Cleansing &amp; Conformance Milestones</h3>
+            <p>Verified sequence of data quality and transformation stages</p>
+        </div>
+    </div>
+    <div class="card-body">
+        {% for step in report.steps %}
+        <div style="border-left: 2px solid var(--primary); padding-left: 12px; margin-bottom: 12px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <h4 style="font-size: 0.88rem; color: var(--text-primary); font-weight: 700; margin-bottom: 2px;">{{ step.step_name }}</h4>
+                <p style="font-size: 0.80rem; color: var(--text-secondary); margin: 0;">{{ step.description }}</p>
+            </div>
+            <span class="badge">Passed</span>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

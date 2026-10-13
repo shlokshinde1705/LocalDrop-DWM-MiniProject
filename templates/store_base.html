@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Storefront{% endblock %} | LocalDrop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="store-body">
+    <!-- Public Storefront Top Navigation -->
+    <header class="store-navbar">
+        <div class="store-brand-group">
+            <a href="{{ url_for('store_home') }}" class="store-brand-title">LocalDrop</a>
+            <span class="store-brand-tagline">Products from local suppliers</span>
+        </div>
+
+        <nav>
+            <ul class="store-nav-links">
+                <li><a href="{{ url_for('store_home') }}" class="{% if store_page == 'home' %}active{% endif %}">Home</a></li>
+                <li><a href="{{ url_for('store_products') }}" class="{% if store_page == 'products' %}active{% endif %}">Products</a></li>
+                <li><a href="{{ url_for('store_suppliers') }}" class="{% if store_page == 'suppliers' %}active{% endif %}">Suppliers</a></li>
+                <li><a href="{{ url_for('store_about') }}" class="{% if store_page == 'about' %}active{% endif %}">About</a></li>
+            </ul>
+        </nav>
+
+        <div class="store-actions">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline" style="font-size:0.78rem; padding:5px 12px;">Analytics Portal</a>
+            <button type="button" class="btn-theme-toggle" id="themeToggle">Dark mode</button>
+        </div>
+    </header>
+
+    <!-- Main Storefront Content -->
+    <main class="store-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Public Storefront Academic Footer -->
+    <footer class="app-footer">
+        <p>LocalDrop: A Local Supplier Dropshipping Marketplace Platform</p>
+        <p style="margin-top: 3px; font-size: 0.72rem; color: var(--text-muted);">
+            Data Warehouse Management Mini Project - Vidyalankar Institute of Technology, Department of Information Technology
+        </p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

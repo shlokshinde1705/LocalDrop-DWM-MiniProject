@@ -1,0 +1,372 @@
+{
+  "timestamp": "2026-10-08 07:53:48",
+  "project": "LocalDrop DWM Mini-Project",
+  "operational_table_counts": {
+    "CUSTOMERS": 300,
+    "SUPPLIERS": 25,
+    "PRODUCTS": 120,
+    "ORDERS": 5975,
+    "SALES": 5423
+  },
+  "warehouse_table_counts": {
+    "FACT_SALES": 5403,
+    "FACT_ORDERS": 5947,
+    "DIM_CUSTOMER": 300,
+    "DIM_SUPPLIER": 25,
+    "DIM_PRODUCT": 120,
+    "DIM_DATE": 749,
+    "DIM_CATEGORY": 8,
+    "DIM_LOCATION": 26,
+    "DIM_PRODUCT_SF": 120,
+    "DIM_CUSTOMER_SF": 300,
+    "DIM_SUPPLIER_SF": 25,
+    "FACT_SALES_SF": 5403
+  },
+  "star_vs_snowflake_benchmark": {
+    "identical_results": true,
+    "star_latency_ms": 2.555,
+    "snowflake_latency_ms": 3.449,
+    "star_joins": 1,
+    "snowflake_joins": 2,
+    "result_sample": [
+      {
+        "category": "Electronics",
+        "revenue": 7060956.0
+      },
+      {
+        "category": "Home & Office",
+        "revenue": 1604240.0
+      },
+      {
+        "category": "Fitness & Sports",
+        "revenue": 1078460.0
+      },
+      {
+        "category": "Travel & Luggage",
+        "revenue": 848227.0
+      },
+      {
+        "category": "Kitchen & Dining",
+        "revenue": 811505.0
+      },
+      {
+        "category": "Mobile Accessories",
+        "revenue": 403101.0
+      },
+      {
+        "category": "Personal Care",
+        "revenue": 389127.0
+      },
+      {
+        "category": "Stationery",
+        "revenue": 338973.0
+      }
+    ]
+  },
+  "data_quality_summary": {
+    "total_raw_orders": 5975,
+    "total_clean_orders": 5947,
+    "duplicates_purged": 7,
+    "nulls_handled": 12,
+    "invalid_quantities_removed": 7,
+    "outliers_flagged": 372,
+    "data_health_score_pct": 100.0
+  },
+  "executive_kpis": {
+    "total_revenue": 12534589.0,
+    "total_orders": 5403,
+    "total_profit": 6692514.0,
+    "average_order_value": 2319.93,
+    "overall_profit_margin_pct": 53.39
+  },
+  "classification": {
+    "target": "Order Net Profit \u2265 Median (\u20b9898.00)",
+    "relevance_ranking": [
+      {
+        "feature": "unit_price",
+        "importance_score": 0.3309
+      },
+      {
+        "feature": "cost_price",
+        "importance_score": 0.3281
+      },
+      {
+        "feature": "quantity",
+        "importance_score": 0.0774
+      },
+      {
+        "feature": "cat_Mobile Accessories",
+        "importance_score": 0.0448
+      },
+      {
+        "feature": "supplier_rating",
+        "importance_score": 0.0414
+      },
+      {
+        "feature": "cat_Stationery",
+        "importance_score": 0.0346
+      },
+      {
+        "feature": "cat_Kitchen & Dining",
+        "importance_score": 0.0168
+      },
+      {
+        "feature": "order_month",
+        "importance_score": 0.0123
+      },
+      {
+        "feature": "cat_Fitness & Sports",
+        "importance_score": 0.012
+      },
+      {
+        "feature": "cat_Travel & Luggage",
+        "importance_score": 0.0095
+      },
+      {
+        "feature": "cat_Personal Care",
+        "importance_score": 0.0012
+      },
+      {
+        "feature": "cat_Home & Office",
+        "importance_score": 0.0006
+      }
+    ],
+    "decision_tree": {
+      "accuracy": 97.59,
+      "precision": 99.62,
+      "recall": 95.63,
+      "f1_score": 97.58,
+      "cv_mean_accuracy": 97.74,
+      "cv_std": 0.66,
+      "confusion_matrix": {
+        "tn": 530,
+        "fp": 2,
+        "fn": 24,
+        "tp": 525
+      }
+    },
+    "naive_bayes": {
+      "accuracy": 80.57,
+      "precision": 77.21,
+      "recall": 87.61,
+      "f1_score": 82.08,
+      "cv_mean_accuracy": 81.75,
+      "cv_std": 0.53,
+      "confusion_matrix": {
+        "tn": 390,
+        "fp": 142,
+        "fn": 68,
+        "tp": 481
+      }
+    }
+  },
+  "clustering": {
+    "k": 3,
+    "silhouette_score": 0.6468,
+    "profiles": [
+      {
+        "assigned_cluster_id": 1,
+        "original_cluster_id": 1,
+        "title": "VIP High-Value Champions",
+        "badge_color": "#27AE60",
+        "count": 45,
+        "percentage": 15.0,
+        "centroid_orders": 44.7,
+        "centroid_spending": 140515.4,
+        "min_spend": 86184.0,
+        "max_spend": 206015.0,
+        "description": "Top-tier loyal customers generating substantial marketplace revenue and consistent repeat orders.",
+        "suggested_action": "Offer exclusive priority dropshipping, dedicated support, and early access to high-margin catalog bundles."
+      },
+      {
+        "assigned_cluster_id": 2,
+        "original_cluster_id": 2,
+        "title": "Regular Loyal Buyers",
+        "badge_color": "#2980B9",
+        "count": 100,
+        "percentage": 33.3,
+        "centroid_orders": 22.8,
+        "centroid_spending": 41517.22,
+        "min_spend": 18896.0,
+        "max_spend": 83236.0,
+        "description": "Consistent customers with steady purchase frequency and moderate average basket value.",
+        "suggested_action": "Nurture with targeted category cross-sell discounts and seasonal festival campaigns to graduate into VIP tier."
+      },
+      {
+        "assigned_cluster_id": 3,
+        "original_cluster_id": 0,
+        "title": "Occasional / Casual Shoppers",
+        "badge_color": "#E67E22",
+        "count": 155,
+        "percentage": 51.7,
+        "centroid_orders": 7.2,
+        "centroid_spending": 13288.22,
+        "min_spend": 1436.0,
+        "max_spend": 31050.0,
+        "description": "Infrequent buyers placing occasional low-volume orders.",
+        "suggested_action": "Deploy re-engagement email promotions, time-limited discount vouchers, and free shipping thresholds."
+      }
+    ],
+    "elbow_curve": [
+      {
+        "k": 1,
+        "inertia": 600.0
+      },
+      {
+        "k": 2,
+        "inertia": 160.0
+      },
+      {
+        "k": 3,
+        "inertia": 63.77
+      },
+      {
+        "k": 4,
+        "inertia": 40.64
+      },
+      {
+        "k": 5,
+        "inertia": 28.09
+      },
+      {
+        "k": 6,
+        "inertia": 22.9
+      },
+      {
+        "k": 7,
+        "inertia": 17.87
+      },
+      {
+        "k": 8,
+        "inertia": 15.02
+      }
+    ]
+  },
+  "association": {
+    "total_rules": 60,
+    "min_support": 0.025,
+    "min_confidence": 0.3,
+    "rules": [
+      {
+        "rank": 1,
+        "antecedent": "Braided Fast Charging Type-C Cable, VoltMax 20000mAh Power Bank",
+        "consequent": "Magnetic Dashboard Car Phone Mount",
+        "rule_text": "IF {Braided Fast Charging Type-C Cable, VoltMax 20000mAh Power Bank} THEN {Magnetic Dashboard Car Phone Mount}",
+        "support": 0.0411,
+        "support_pct": "4.11%",
+        "confidence": 0.8976,
+        "confidence_pct": "89.8%",
+        "lift": 16.05,
+        "is_strong": true
+      },
+      {
+        "rank": 2,
+        "antecedent": "Magnetic Dashboard Car Phone Mount",
+        "consequent": "Braided Fast Charging Type-C Cable, VoltMax 20000mAh Power Bank",
+        "rule_text": "IF {Magnetic Dashboard Car Phone Mount} THEN {Braided Fast Charging Type-C Cable, VoltMax 20000mAh Power Bank}",
+        "support": 0.0411,
+        "support_pct": "4.11%",
+        "confidence": 0.7355,
+        "confidence_pct": "73.6%",
+        "lift": 16.05,
+        "is_strong": true
+      },
+      {
+        "rank": 3,
+        "antecedent": "Magnetic Dashboard Car Phone Mount, VoltMax 20000mAh Power Bank",
+        "consequent": "Braided Fast Charging Type-C Cable",
+        "rule_text": "IF {Magnetic Dashboard Car Phone Mount, VoltMax 20000mAh Power Bank} THEN {Braided Fast Charging Type-C Cable}",
+        "support": 0.0411,
+        "support_pct": "4.11%",
+        "confidence": 0.9048,
+        "confidence_pct": "90.5%",
+        "lift": 15.68,
+        "is_strong": true
+      },
+      {
+        "rank": 4,
+        "antecedent": "Braided Fast Charging Type-C Cable",
+        "consequent": "Magnetic Dashboard Car Phone Mount, VoltMax 20000mAh Power Bank",
+        "rule_text": "IF {Braided Fast Charging Type-C Cable} THEN {Magnetic Dashboard Car Phone Mount, VoltMax 20000mAh Power Bank}",
+        "support": 0.0411,
+        "support_pct": "4.11%",
+        "confidence": 0.7125,
+        "confidence_pct": "71.2%",
+        "lift": 15.68,
+        "is_strong": true
+      },
+      {
+        "rank": 5,
+        "antecedent": "Hardcover Dotted Bullet Journal Notebook",
+        "consequent": "Adjustable Eye-Care LED Desk Lamp, Multi-Tier Wooden Desktop Organizer",
+        "rule_text": "IF {Hardcover Dotted Bullet Journal Notebook} THEN {Adjustable Eye-Care LED Desk Lamp, Multi-Tier Wooden Desktop Organizer}",
+        "support": 0.0426,
+        "support_pct": "4.26%",
+        "confidence": 0.7284,
+        "confidence_pct": "72.8%",
+        "lift": 14.96,
+        "is_strong": true
+      },
+      {
+        "rank": 6,
+        "antecedent": "Adjustable Eye-Care LED Desk Lamp, Multi-Tier Wooden Desktop Organizer",
+        "consequent": "Hardcover Dotted Bullet Journal Notebook",
+        "rule_text": "IF {Adjustable Eye-Care LED Desk Lamp, Multi-Tier Wooden Desktop Organizer} THEN {Hardcover Dotted Bullet Journal Notebook}",
+        "support": 0.0426,
+        "support_pct": "4.26%",
+        "confidence": 0.8741,
+        "confidence_pct": "87.4%",
+        "lift": 14.96,
+        "is_strong": true
+      },
+      {
+        "rank": 7,
+        "antecedent": "Hardcover Dotted Bullet Journal Notebook, Multi-Tier Wooden Desktop Organizer",
+        "consequent": "Adjustable Eye-Care LED Desk Lamp",
+        "rule_text": "IF {Hardcover Dotted Bullet Journal Notebook, Multi-Tier Wooden Desktop Organizer} THEN {Adjustable Eye-Care LED Desk Lamp}",
+        "support": 0.0426,
+        "support_pct": "4.26%",
+        "confidence": 0.8939,
+        "confidence_pct": "89.4%",
+        "lift": 14.84,
+        "is_strong": true
+      },
+      {
+        "rank": 8,
+        "antecedent": "Adjustable Eye-Care LED Desk Lamp",
+        "consequent": "Hardcover Dotted Bullet Journal Notebook, Multi-Tier Wooden Desktop Organizer",
+        "rule_text": "IF {Adjustable Eye-Care LED Desk Lamp} THEN {Hardcover Dotted Bullet Journal Notebook, Multi-Tier Wooden Desktop Organizer}",
+        "support": 0.0426,
+        "support_pct": "4.26%",
+        "confidence": 0.7066,
+        "confidence_pct": "70.7%",
+        "lift": 14.84,
+        "is_strong": true
+      },
+      {
+        "rank": 9,
+        "antecedent": "Hardcover Dotted Bullet Journal Notebook, Adjustable Eye-Care LED Desk Lamp",
+        "consequent": "Multi-Tier Wooden Desktop Organizer",
+        "rule_text": "IF {Hardcover Dotted Bullet Journal Notebook, Adjustable Eye-Care LED Desk Lamp} THEN {Multi-Tier Wooden Desktop Organizer}",
+        "support": 0.0426,
+        "support_pct": "4.26%",
+        "confidence": 0.8806,
+        "confidence_pct": "88.1%",
+        "lift": 14.79,
+        "is_strong": true
+      },
+      {
+        "rank": 10,
+        "antecedent": "Multi-Tier Wooden Desktop Organizer",
+        "consequent": "Hardcover Dotted Bullet Journal Notebook, Adjustable Eye-Care LED Desk Lamp",
+        "rule_text": "IF {Multi-Tier Wooden Desktop Organizer} THEN {Hardcover Dotted Bullet Journal Notebook, Adjustable Eye-Care LED Desk Lamp}",
+        "support": 0.0426,
+        "support_pct": "4.26%",
+        "confidence": 0.7152,
+        "confidence_pct": "71.5%",
+        "lift": 14.79,
+        "is_strong": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+category,total_sales_count,units_sold,category_revenue,category_profit,margin_pct
+Electronics,1877,4083,7060956.0,3643966.0,51.61
+Home & Office,813,1740,1604240.0,871200.0,54.31
+Fitness & Sports,656,1500,1078460.0,601760.0,55.8
+Travel & Luggage,348,883,848227.0,471907.0,55.63
+Kitchen & Dining,514,1215,811505.0,457335.0,56.36
+Mobile Accessories,536,1169,403101.0,238396.0,59.14
+Personal Care,251,633,389127.0,214207.0,55.05
+Stationery,408,947,338973.0,193743.0,57.16

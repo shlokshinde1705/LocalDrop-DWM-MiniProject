@@ -1,0 +1,4 @@
+assigned_cluster_id,original_cluster_id,title,badge_color,count,percentage,centroid_orders,centroid_spending,min_spend,max_spend,description,suggested_action
+1,1,VIP High-Value Champions,#27AE60,45,15.0,44.7,140515.4,86184.0,206015.0,Top-tier loyal customers generating substantial marketplace revenue and consistent repeat orders.,"Offer exclusive priority dropshipping, dedicated support, and early access to high-margin catalog bundles."
+2,2,Regular Loyal Buyers,#2980B9,100,33.3,22.8,41517.22,18896.0,83236.0,Consistent customers with steady purchase frequency and moderate average basket value.,Nurture with targeted category cross-sell discounts and seasonal festival campaigns to graduate into VIP tier.
+3,0,Occasional / Casual Shoppers,#E67E22,155,51.7,7.2,13288.22,1436.0,31050.0,Infrequent buyers placing occasional low-volume orders.,"Deploy re-engagement email promotions, time-limited discount vouchers, and free shipping thresholds."

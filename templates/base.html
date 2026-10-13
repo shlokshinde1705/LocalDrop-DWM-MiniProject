@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LocalDrop Dashboard{% endblock %} | Analytics Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <h1>LocalDrop</h1>
+            <p>Analytics Portal</p>
+            <div style="margin-top: 10px;">
+                <a href="{{ url_for('store_home') }}" style="display: inline-block; padding: 4px 10px; font-size: 0.74rem; color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 4px; text-decoration: none;">Back to Store</a>
+            </div>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li class="sidebar-category">Overview</li>
+            <li><a href="{{ url_for('dashboard') }}" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a></li>
+
+            <li class="sidebar-category">Operations</li>
+            <li><a href="{{ url_for('orders') }}" class="{% if active_page == 'orders' %}active{% endif %}">Orders</a></li>
+            <li><a href="{{ url_for('products') }}" class="{% if active_page == 'products' %}active{% endif %}">Products</a></li>
+            <li><a href="{{ url_for('customers') }}" class="{% if active_page == 'customers' %}active{% endif %}">Customers</a></li>
+            <li><a href="{{ url_for('suppliers') }}" class="{% if active_page == 'suppliers' %}active{% endif %}">Suppliers</a></li>
+
+            <li class="sidebar-category">Analysis</li>
+            <li><a href="{{ url_for('business_insights') }}" class="{% if active_page == 'business_insights' %}active{% endif %}">Business Insights</a></li>
+            <li><a href="{{ url_for('recommendations') }}" class="{% if active_page == 'recommendations' %}active{% endif %}">Recommendations</a></li>
+
+            <li class="sidebar-category">Data Management</li>
+            <li><a href="{{ url_for('data_preprocessing') }}" class="{% if active_page == 'data_preprocessing' %}active{% endif %}">Data Preprocessing</a></li>
+            <li><a href="{{ url_for('data_warehouse_page') }}" class="{% if active_page == 'data_warehouse' %}active{% endif %}">Data Warehouse</a></li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div><strong>VIT Mumbai | INFT C</strong></div>
+            <div>Ayush Kamble (24101C0065)</div>
+            <div>Shlok Shinde (24101C0063)</div>
+            <div>Academic Year 2026-27</div>
+        </div>
+    </aside>
+
+    <!-- Main Workspace Container -->
+    <div class="main-wrapper">
+        <header class="top-navbar">
+            <div class="header-title">
+                <h2>{% block page_heading %}Dashboard Overview{% endblock %}</h2>
+                <span>{% block page_subheading %}Data Warehouse Management (DWM) Mini Project{% endblock %}</span>
+            </div>
+            <div class="top-actions">
+                <a href="{{ url_for('store_home') }}" class="btn btn-outline" style="font-size:0.78rem; padding:5px 10px;">Storefront</a>
+                <button type="button" class="btn-theme-toggle" id="themeToggle">Dark mode</button>
+                {% block top_actions %}{% endblock %}
+            </div>
+        </header>
+
+        <main class="content-body">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="app-footer">
+            <p>Data Warehouse Management Mini Project - Vidyalankar Institute of Technology</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

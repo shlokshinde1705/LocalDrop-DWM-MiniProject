@@ -1,0 +1,392 @@
+{% extends 'base.html' %}
+{% block title %}Data Warehouse Architecture{% endblock %}
+{% block page_heading %}Data Warehouse & Dimensional Architecture{% endblock %}
+{% block page_subheading %}Star Schema, Snowflake Schema, Fact Constellation, Data Mart, and Performance Benchmarks{% endblock %}
+
+{% block content %}
+<!-- Table Row Counts Summary Grid -->
+<div class="kpi-grid">
+    <div class="kpi-card">
+        <div class="kpi-label">FACT_SALES</div>
+        <div class="kpi-value">{{ table_counts.FACT_SALES }}</div>
+        <div class="kpi-subtext">Settled line-item sales</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">FACT_ORDERS</div>
+        <div class="kpi-value">{{ table_counts.FACT_ORDERS }}</div>
+        <div class="kpi-subtext">Logistics lifecycle records</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">DIM_CUSTOMER</div>
+        <div class="kpi-value">{{ table_counts.DIM_CUSTOMER }}</div>
+        <div class="kpi-subtext">Conformed customer entities</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">DIM_SUPPLIER</div>
+        <div class="kpi-value">{{ table_counts.DIM_SUPPLIER }}</div>
+        <div class="kpi-subtext">Regional suppliers</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">DIM_DATE</div>
+        <div class="kpi-value">{{ table_counts.DIM_DATE }}</div>
+        <div class="kpi-subtext">Calendar date dimension</div>
+    </div>
+</div>
+
+<!-- 1. STAR SCHEMA ARCHITECTURAL DIAGRAM -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>1. Star Schema Architecture</h3>
+            <p>Central sales records surrounded by customer, product, supplier, and date dimensions</p>
+        </div>
+        <span class="badge">Star Schema</span>
+    </div>
+    <div class="card-body">
+        <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:14px;">
+            <strong>How it works:</strong> A star schema organizes data like the points of a star around a central sales table.
+            Because customer, product, and supplier details are kept directly connected without extra sub-tables, business reports and dashboards run quickly and are simple to interpret.
+        </p>
+        <div class="schema-container">
+            <!-- Left Dimension -->
+            <div class="schema-table-box">
+                <div class="schema-table-header">DIM_CUSTOMER</div>
+                <div class="schema-table-body">
+                    <span class="pk">customer_key (PK)</span><br>
+                    customer_id (NK)<br>
+                    customer_name<br>
+                    city<br>
+                    state<br>
+                    registration_date
+                </div>
+            </div>
+
+            <div class="connector-line">&mdash;</div>
+
+            <!-- Central Fact -->
+            <div class="schema-table-box fact-box">
+                <div class="schema-table-header fact-header">FACT_SALES</div>
+                <div class="schema-table-body">
+                    <span class="pk">sale_id (PK)</span><br>
+                    order_id (NK)<br>
+                    <span class="fk">customer_key (FK)</span><br>
+                    <span class="fk">product_key (FK)</span><br>
+                    <span class="fk">supplier_key (FK)</span><br>
+                    <span class="fk">date_key (FK)</span><br>
+                    quantity [M]<br>
+                    unit_price<br>
+                    total_amount [M]<br>
+                    profit [M]
+                </div>
+            </div>
+
+            <div class="connector-line">&mdash;</div>
+
+            <!-- Right Dimension -->
+            <div class="schema-table-box">
+                <div class="schema-table-header">DIM_PRODUCT</div>
+                <div class="schema-table-body">
+                    <span class="pk">product_key (PK)</span><br>
+                    product_id (NK)<br>
+                    product_name<br>
+                    category (Denorm)<br>
+                    price<br>
+                    cost_price
+                </div>
+            </div>
+        </div>
+
+        <div class="schema-container" style="padding-top:0;">
+            <div class="schema-table-box">
+                <div class="schema-table-header">DIM_SUPPLIER</div>
+                <div class="schema-table-body">
+                    <span class="pk">supplier_key (PK)</span><br>
+                    supplier_id (NK)<br>
+                    supplier_name<br>
+                    city<br>
+                    state<br>
+                    rating
+                </div>
+            </div>
+
+            <div style="width: 50px;"></div>
+
+            <div class="schema-table-box">
+                <div class="schema-table-header">DIM_DATE</div>
+                <div class="schema-table-body">
+                    <span class="pk">date_key (PK YYYYMMDD)</span><br>
+                    date (ISO Date)<br>
+                    day, day_name<br>
+                    week, month, month_name<br>
+                    quarter, year
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. SNOWFLAKE SCHEMA ARCHITECTURAL DIAGRAM -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>2. Snowflake Schema Architecture</h3>
+            <p>Extended dimensional structure with category and location sub-tables</p>
+        </div>
+        <span class="badge">Snowflake Schema</span>
+    </div>
+    <div class="card-body">
+        <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:14px;">
+            <strong>How it works:</strong> A snowflake schema branches out further by splitting categories and geographic cities into dedicated sub-tables.
+            This eliminates repeated text values and saves storage, though answering business questions requires linking more tables together.
+        </p>
+        <div class="schema-container">
+            <!-- Normalized Location -->
+            <div class="schema-table-box norm-box">
+                <div class="schema-table-header norm-header">DIM_LOCATION</div>
+                <div class="schema-table-body">
+                    <span class="pk">location_id (PK)</span><br>
+                    city<br>
+                    state
+                </div>
+            </div>
+
+            <div class="connector-line">&mdash;</div>
+
+            <!-- Customer SF -->
+            <div class="schema-table-box">
+                <div class="schema-table-header">DIM_CUSTOMER_SF</div>
+                <div class="schema-table-body">
+                    <span class="pk">customer_key (PK)</span><br>
+                    customer_id<br>
+                    customer_name<br>
+                    <span class="fk">location_id (FK)</span><br>
+                    registration_date
+                </div>
+            </div>
+
+            <div class="connector-line">&mdash;</div>
+
+            <!-- Central Fact SF -->
+            <div class="schema-table-box fact-box">
+                <div class="schema-table-header fact-header">FACT_SALES_SF</div>
+                <div class="schema-table-body">
+                    <span class="pk">sale_id (PK)</span><br>
+                    <span class="fk">customer_key (FK)</span><br>
+                    <span class="fk">product_key (FK)</span><br>
+                    <span class="fk">supplier_key (FK)</span><br>
+                    <span class="fk">date_key (FK)</span><br>
+                    total_amount [M]<br>
+                    profit [M]
+                </div>
+            </div>
+
+            <div class="connector-line">&mdash;</div>
+
+            <!-- Product SF -->
+            <div class="schema-table-box">
+                <div class="schema-table-header">DIM_PRODUCT_SF</div>
+                <div class="schema-table-body">
+                    <span class="pk">product_key (PK)</span><br>
+                    product_id<br>
+                    product_name<br>
+                    <span class="fk">category_id (FK)</span><br>
+                    price, cost_price
+                </div>
+            </div>
+
+            <div class="connector-line">&mdash;</div>
+
+            <!-- Normalized Category -->
+            <div class="schema-table-box norm-box">
+                <div class="schema-table-header norm-header">DIM_CATEGORY</div>
+                <div class="schema-table-body">
+                    <span class="pk">category_id (PK)</span><br>
+                    category_name
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 3. STAR VS SNOWFLAKE COMPARATIVE BENCHMARK -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>3. Star Schema vs. Snowflake Schema Empirical Benchmark</h3>
+            <p>Execution of equivalent analytical query across both schemas to measure latency and output parity</p>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Architectural Criterion</th>
+                        <th>Star Schema (Denormalized)</th>
+                        <th>Snowflake Schema (Normalized)</th>
+                        <th>Empirical Observation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Table Count</strong></td>
+                        <td>5 Tables (1 Fact + 4 Dimensions)</td>
+                        <td>7 Tables (1 Fact + 6 Dimensions/Sub-dimensions)</td>
+                        <td>Snowflake introduces DIM_CATEGORY and DIM_LOCATION</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Join Complexity</strong></td>
+                        <td>Single-level Star Joins (1 JOIN per dimension)</td>
+                        <td>Multi-level Snowflake Joins (2+ JOINS per hierarchy)</td>
+                        <td>Star schema eliminates normalized join depth</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Redundancy</strong></td>
+                        <td>Higher (Category &amp; City strings repeated)</td>
+                        <td>Minimal (Normalized down to surrogate IDs)</td>
+                        <td>Snowflake reduces storage redundancy</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Query Latency</strong></td>
+                        <td><strong>{{ star_benchmark.star_time_ms }} ms</strong></td>
+                        <td><strong>{{ star_benchmark.sf_time_ms }} ms</strong></td>
+                        <td>Star executes faster due to fewer table joins</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Parity Check</strong></td>
+                        <td colspan="2" style="text-align:center;">
+                            {% if star_benchmark.match %}
+                            <span class="badge">Identical aggregate output across both schemas</span>
+                            {% else %}
+                            <span class="badge badge-cancelled">Mismatch</span>
+                            {% endif %}
+                        </td>
+                        <td>Both schemas produce identical revenue totals</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 4. FACT CONSTELLATION & SALES DATA MART -->
+<div class="grid-2">
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>4. Fact Constellation (Shared Dimensions)</h3>
+                <p>FACT_SALES and FACT_ORDERS sharing conformed dimensions</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:12px;">
+                A <strong>Fact Constellation</strong> contains multiple fact tables sharing conformed dimensions.
+                In LocalDrop, <code>FACT_SALES</code> captures financial line-item settlements, while <code>FACT_ORDERS</code> captures operational order status lifecycles.
+                Both share <code>DIM_CUSTOMER</code>, <code>DIM_PRODUCT</code>, <code>DIM_SUPPLIER</code>, and <code>DIM_DATE</code> without duplication.
+            </p>
+            <div style="display:flex; gap:8px;">
+                <span class="badge">Shared Conformed Dimensions: 4</span>
+                <span class="badge">Fact Tables: 2</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>5. Dedicated Sales Data Mart</h3>
+                <p>Analytical views accelerating reporting queries</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <ul style="font-size:0.82rem; line-height:1.6; padding-left:18px; color:var(--text-primary);">
+                <li><code>DM_MONTHLY_CATEGORY_SALES</code>: Aggregated turnover and margin by year, month, and category.</li>
+                <li><code>DM_SUPPLIER_SCORECARD</code>: Fulfillment count, total revenue, and margin by supplier.</li>
+                <li><code>DM_CUSTOMER_RFM</code>: Recency, Frequency, and Monetary metrics for customer analysis.</li>
+                <li><code>DM_CITY_PERFORMANCE</code>: Geographic sales breakdown across 26 Indian urban centers.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- 5. ETL EXECUTION AUDIT LOG -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>6. Automated ETL Pipeline Execution Log</h3>
+            <p>Chronological staging, cleansing, loading, and reconciliation trace</p>
+        </div>
+    </div>
+    <div class="card-body" style="padding: 0;">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Log ID</th>
+                        <th>Timestamp</th>
+                        <th>Pipeline Stage</th>
+                        <th class="text-center">Status</th>
+                        <th>Source Entity</th>
+                        <th>Target Entity</th>
+                        <th class="text-right">Rows Loaded</th>
+                        <th class="text-right">Duration (s)</th>
+                        <th>Audit Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for l in etl_logs %}
+                    <tr>
+                        <td><code>#{{ l.log_id }}</code></td>
+                        <td>{{ l.timestamp }}</td>
+                        <td><strong>{{ l.stage }}</strong></td>
+                        <td class="text-center"><span class="badge">{{ l.status }}</span></td>
+                        <td><small>{{ l.source_table }}</small></td>
+                        <td><small>{{ l.target_table }}</small></td>
+                        <td class="text-right">{{ l.rows_loaded }}</td>
+                        <td class="text-right">{{ l.duration_sec }}</td>
+                        <td><small>{{ l.message }}</small></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 6. COMPREHENSIVE DATA DICTIONARY -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>7. Enterprise Data Dictionary</h3>
+            <p>Attribute schemas and definitions across operational and dimensional tables</p>
+        </div>
+    </div>
+    <div class="card-body">
+        <details class="sql-details">
+            <summary>View Data Dictionary Schemas</summary>
+            <div style="margin-top: 14px;">
+            {% for tbl_name, tbl_info in data_dictionary.items() %}
+            <div style="margin-bottom:18px;">
+                <h4 style="font-size:0.88rem; margin-bottom:4px; color:var(--text-primary);">Table: <code>{{ tbl_name }}</code></h4>
+                <p style="font-size:0.78rem; color:var(--text-secondary); margin-bottom:8px;">{{ tbl_info.description }}</p>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th>Column Name</th><th>Data Type</th><th>Description &amp; Semantics</th></tr></thead>
+                        <tbody>
+                            {% for c_name, c_info in tbl_info.columns.items() %}
+                            <tr>
+                                <td><code>{{ c_name }}</code></td>
+                                <td><span class="badge">{{ c_info.type }}</span></td>
+                                <td>{{ c_info.description }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endfor %}
+            </div>
+        </details>
+    </div>
+</div>
+{% endblock %}

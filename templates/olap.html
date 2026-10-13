@@ -1,0 +1,302 @@
+{% extends 'base.html' %}
+{% block title %}OLAP Operations{% endblock %}
+{% block page_heading %}Multidimensional OLAP Operations Suite{% endblock %}
+{% block page_subheading %}Interactive Roll-up, Drill-down, Slice, Dice, Pivot, and CUBE Simulation{% endblock %}
+
+{% block content %}
+<!-- 1. ROLL-UP OPERATION -->
+<div class="card" id="rollup-section">
+    <div class="card-header">
+        <div>
+            <h3>1. Roll-up Operation (Climbing Concept Hierarchy)</h3>
+            <p>{{ rollup.concept }}</p>
+        </div>
+        <form method="GET" action="{{ url_for('olap_page') }}#rollup-section" style="display:flex; gap:8px; align-items:center;">
+            <label style="font-size:0.75rem; font-weight:600;">Granularity:</label>
+            <select name="rollup_level" onchange="this.form.submit()" style="padding:4px 8px; border-radius:4px; border:1px solid var(--border-color); font-size:0.78rem;">
+                <option value="quarter" {% if current_rollup_level == 'quarter' %}selected{% endif %}>Quarter (Default)</option>
+                <option value="year" {% if current_rollup_level == 'year' %}selected{% endif %}>Year</option>
+                <option value="month" {% if current_rollup_level == 'month' %}selected{% endif %}>Month</option>
+                <option value="day" {% if current_rollup_level == 'day' %}selected{% endif %}>Day (Recent 30)</option>
+            </select>
+        </form>
+    </div>
+    <div class="card-body">
+        <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ rollup.sql }}</pre>
+</details>
+        <div class="grid-2">
+            <div>
+                <canvas id="rollupChart" height="200"></canvas>
+            </div>
+            <div class="table-responsive" style="max-height:240px; overflow-y:auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Time Level</th>
+                            <th class="text-right">Sales Count</th>
+                            <th class="text-right">Units</th>
+                            <th class="text-right">Total Revenue</th>
+                            <th class="text-right">Net Profit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in rollup.data %}
+                        <tr>
+                            <td><strong>{{ r.time_dimension }}</strong></td>
+                            <td class="text-right">{{ r.transaction_count }}</td>
+                            <td class="text-right">{{ r.total_units_sold }}</td>
+                            <td class="text-right"><strong>₹{{ '{:,.2f}'.format(r.total_revenue) }}</strong></td>
+                            <td class="text-right">₹{{ '{:,.2f}'.format(r.total_profit) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. DRILL-DOWN OPERATION -->
+<div class="card" id="drill-section">
+    <div class="card-header">
+        <div>
+            <h3>2. Drill-down Operation (Descending Concept Hierarchy)</h3>
+            <p>{{ drill.concept }}</p>
+        </div>
+        <form method="GET" action="{{ url_for('olap_page') }}#drill-section" style="display:flex; gap:8px; align-items:center;">
+            <label style="font-size:0.75rem; font-weight:600;">Category:</label>
+            <select name="drill_target" onchange="this.form.submit()" style="padding:4px 8px; border-radius:4px; border:1px solid var(--border-color); font-size:0.78rem;">
+                <option value="Electronics" {% if current_drill_target == 'Electronics' %}selected{% endif %}>Electronics</option>
+                <option value="Mobile Accessories" {% if current_drill_target == 'Mobile Accessories' %}selected{% endif %}>Mobile Accessories</option>
+                <option value="Home & Office" {% if current_drill_target == 'Home & Office' %}selected{% endif %}>Home & Office</option>
+                <option value="Fitness & Sports" {% if current_drill_target == 'Fitness & Sports' %}selected{% endif %}>Fitness & Sports</option>
+                <option value="Kitchen & Dining" {% if current_drill_target == 'Kitchen & Dining' %}selected{% endif %}>Kitchen & Dining</option>
+                <option value="Travel & Luggage" {% if current_drill_target == 'Travel & Luggage' %}selected{% endif %}>Travel & Luggage</option>
+                <option value="Personal Care" {% if current_drill_target == 'Personal Care' %}selected{% endif %}>Personal Care</option>
+                <option value="Stationery" {% if current_drill_target == 'Stationery' %}selected{% endif %}>Stationery</option>
+            </select>
+        </form>
+    </div>
+    <div class="card-body">
+        <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ drill.sql }}</pre>
+</details>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Product SKU</th>
+                        <th>Category</th>
+                        <th class="text-right">Unit Price</th>
+                        <th class="text-right">Orders</th>
+                        <th class="text-right">Units Sold</th>
+                        <th class="text-right">Gross Revenue</th>
+                        <th class="text-right">Net Profit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in drill.data %}
+                    <tr>
+                        <td><strong>{{ r.product_name }}</strong></td>
+                        <td><span class="badge">{{ r.category }}</span></td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(r.unit_selling_price) }}</td>
+                        <td class="text-right">{{ r.total_orders }}</td>
+                        <td class="text-right">{{ r.total_units_sold }}</td>
+                        <td class="text-right"><strong>₹{{ '{:,.2f}'.format(r.total_revenue) }}</strong></td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(r.total_profit) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="grid-2">
+    <!-- 3. SLICE OPERATION -->
+    <div class="card" id="slice-section">
+        <div class="card-header">
+            <div>
+                <h3>3. Slice Operation (Single Dimension Cut)</h3>
+                <p>{{ slice.concept }}</p>
+            </div>
+            <form method="GET" action="{{ url_for('olap_page') }}#slice-section" style="display:flex; gap:6px;">
+                <select name="slice_dim" onchange="this.form.submit()" style="padding:4px; font-size:0.75rem;">
+                    <option value="category" {% if current_slice_dim == 'category' %}selected{% endif %}>Category</option>
+                    <option value="year" {% if current_slice_dim == 'year' %}selected{% endif %}>Year</option>
+                    <option value="state" {% if current_slice_dim == 'state' %}selected{% endif %}>State</option>
+                </select>
+            </form>
+        </div>
+        <div class="card-body">
+            <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ slice.sql }}</pre>
+</details>
+            <div class="table-responsive" style="max-height:220px; overflow-y:auto;">
+                <table class="data-table">
+                    <thead><tr><th>Dimension Level</th><th class="text-right">Transactions</th><th class="text-right">Units</th><th class="text-right">Revenue</th></tr></thead>
+                    <tbody>
+                        {% for r in slice.data %}
+                        <tr>
+                            <td><strong>{{ r.dimension_attribute }}</strong></td>
+                            <td class="text-right">{{ r.transaction_count }}</td>
+                            <td class="text-right">{{ r.units_sold }}</td>
+                            <td class="text-right"><strong>₹{{ '{:,.2f}'.format(r.revenue) }}</strong></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. DICE OPERATION -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>4. Dice Operation (Multi-Dimensional Sub-Cube)</h3>
+                <p>{{ dice.concept }}</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ dice.sql }}</pre>
+</details>
+            <div class="table-responsive" style="max-height:220px; overflow-y:auto;">
+                <table class="data-table">
+                    <thead><tr><th>Year</th><th>State</th><th>Category</th><th class="text-right">Revenue</th></tr></thead>
+                    <tbody>
+                        {% for r in dice.data[:8] %}
+                        <tr>
+                            <td>{{ r.year }}</td>
+                            <td>{{ r.state }}</td>
+                            <td><span class="badge">{{ r.category }}</span></td>
+                            <td class="text-right"><strong>₹{{ '{:,.2f}'.format(r.revenue) }}</strong></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 5. PIVOT OPERATION -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>5. Pivot Operation (Cross-Tabulation Matrix)</h3>
+            <p>{{ pivot.concept }}</p>
+        </div>
+    </div>
+    <div class="card-body">
+        <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ pivot.sql }}</pre>
+</details>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th class="text-right">Q1 Revenue</th>
+                        <th class="text-right">Q2 Revenue</th>
+                        <th class="text-right">Q3 Revenue</th>
+                        <th class="text-right">Q4 Revenue</th>
+                        <th class="text-right">Total Revenue</th>
+                        <th class="text-right">Total Profit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in pivot.data %}
+                    <tr>
+                        <td><strong>{{ r.category }}</strong></td>
+                        <td class="text-right">₹{{ '{:,.0f}'.format(r.q1_revenue) }}</td>
+                        <td class="text-right">₹{{ '{:,.0f}'.format(r.q2_revenue) }}</td>
+                        <td class="text-right">₹{{ '{:,.0f}'.format(r.q3_revenue) }}</td>
+                        <td class="text-right">₹{{ '{:,.0f}'.format(r.q4_revenue) }}</td>
+                        <td class="text-right"><strong>₹{{ '{:,.2f}'.format(r.total_revenue) }}</strong></td>
+                        <td class="text-right">₹{{ '{:,.0f}'.format(r.total_profit) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 6. CUBE SIMULATION -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>6. Multidimensional CUBE Aggregation</h3>
+            <p>{{ cube.concept }}</p>
+        </div>
+    </div>
+    <div class="card-body">
+        <details class="sql-details"><summary>View SQL</summary>
+<pre class="sql-box">{{ cube.sql }}</pre>
+</details>
+        <div class="table-responsive" style="max-height:280px; overflow-y:auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Category Dimension</th>
+                        <th>Year Dimension</th>
+                        <th>Aggregation Level</th>
+                        <th class="text-right">Gross Revenue</th>
+                        <th class="text-right">Net Profit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in cube.data %}
+                    <tr>
+                        <td>{{ r.category_dim }}</td>
+                        <td>{{ r.year_dim }}</td>
+                        <td><span class="badge">{{ r.aggregation_level }}</span></td>
+                        <td class="text-right"><strong>₹{{ '{:,.2f}'.format(r.total_revenue) }}</strong></td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(r.total_profit) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const rData = {{ rollup.data|tojson }};
+    const labels = rData.map(d => d.time_dimension);
+    const revs = rData.map(d => d.total_revenue);
+
+    new Chart(document.getElementById('rollupChart'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Revenue (₹)',
+                data: revs,
+                backgroundColor: '#2563eb',
+                borderRadius: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#f1f5f9' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

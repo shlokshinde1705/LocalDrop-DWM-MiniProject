@@ -1,0 +1,409 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard Overview{% endblock %}
+{% block page_heading %}LocalDrop — Dashboard Overview{% endblock %}
+{% block page_subheading %}Data Warehouse Analytics and Performance Summary{% endblock %}
+
+{% block top_actions %}
+<a href="{{ url_for('export_csv', dataset='sales') }}" class="btn btn-outline">Download Sales CSV</a>
+{% endblock %}
+
+{% block content %}
+<!-- Parameterized Filter Panel -->
+<div class="filter-panel">
+    <form method="GET" action="{{ url_for('dashboard') }}" class="filter-form">
+        <div class="filter-group">
+            <label for="year">Calendar Year</label>
+            <select name="year" id="year">
+                <option value="">All Historical Years</option>
+                {% for y in filter_opts.years %}
+                <option value="{{ y }}" {% if filters.year == y|string %}selected{% endif %}>{{ y }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="category">Product Category</label>
+            <select name="category" id="category">
+                <option value="">All Categories</option>
+                {% for c in filter_opts.categories %}
+                <option value="{{ c }}" {% if filters.category == c %}selected{% endif %}>{{ c }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="supplier_id">Supplier</label>
+            <select name="supplier_id" id="supplier_id">
+                <option value="">All Suppliers</option>
+                {% for s in filter_opts.suppliers %}
+                <option value="{{ s.supplier_id }}" {% if filters.supplier_id == s.supplier_id|string %}selected{% endif %}>{{ s.supplier_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="state">Customer State</label>
+            <select name="state" id="state">
+                <option value="">All States</option>
+                {% for st in filter_opts.states %}
+                <option value="{{ st }}" {% if filters.state == st %}selected{% endif %}>{{ st }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-actions">
+            <button type="submit" class="btn btn-primary">Apply Filters</button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline">Reset</a>
+        </div>
+    </form>
+</div>
+
+<!-- Primary KPI Cards Grid -->
+<div class="kpi-grid">
+    <div class="kpi-card">
+        <div class="kpi-label">Total Sales</div>
+        <div class="kpi-value">{{ kpi_revenue }}</div>
+        <div class="kpi-subtext">Settled gross sales turnover</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Total Profit</div>
+        <div class="kpi-value">{{ kpi_profit }}</div>
+        <div class="kpi-subtext">Gross Margin: <strong>{{ kpi_margin }}</strong></div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Number of Orders</div>
+        <div class="kpi-value">{{ kpi_orders }}</div>
+        <div class="kpi-subtext">Settled customer purchases</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Number of Customers</div>
+        <div class="kpi-value">{{ kpi_customers }}</div>
+        <div class="kpi-subtext">Active registered buyer accounts</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Average Order Value</div>
+        <div class="kpi-value">{{ kpi_aov }}</div>
+        <div class="kpi-subtext">Mean spending per order</div>
+    </div>
+</div>
+
+<!-- Relevant Business Alerts & Observations -->
+{% if business_alerts %}
+<div class="card" style="margin-bottom: 20px;">
+    <div class="card-header">
+        <div>
+            <h3>Operational Alerts &amp; Business Observations</h3>
+            <p>Live inventory, fulfillment, and revenue notifications from operational data</p>
+        </div>
+        <span class="badge">Live Alerts</span>
+    </div>
+    <div class="card-body" style="padding-top: 12px; padding-bottom: 12px;">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            {% for alert in business_alerts %}
+            <div style="padding: 10px 14px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-main); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong style="font-size: 0.84rem; color: var(--text-primary);">{{ alert.title }}:</strong>
+                    <span style="font-size: 0.82rem; color: var(--text-secondary); margin-left: 6px;">{{ alert.message }}</span>
+                </div>
+                <span class="badge" style="font-size: 0.70rem;">{{ alert.type|upper }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Chart Visualizations Grid -->
+<div class="grid-2">
+    <!-- Chart 1: Monthly Sales Trend -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>Monthly Sales and Net Profit</h3>
+                <p>24-Month Longitudinal Analysis (FACT_SALES)</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <canvas id="monthlyChart" height="190"></canvas>
+            <div class="insight-callout">
+                <strong>Observation:</strong> Sales peaks in October-November correspond with festive shopping periods, matching expected seasonal patterns.
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart 2: Category Breakdown -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>Sales by Product Category</h3>
+                <p>Gross Turnover Distribution across Categories</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <canvas id="categoryChart" height="190"></canvas>
+            <div class="insight-callout">
+                <strong>Observation:</strong> Electronics and Fitness & Sports account for the highest proportion of marketplace sales volume.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid-2">
+    <!-- Chart 3: Top 5 Products -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>Top 5 Products by Revenue</h3>
+                <p>Ranked by Total Sales Value</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <canvas id="topProductsChart" height="180"></canvas>
+        </div>
+    </div>
+
+    <!-- Chart 4: Order Status Breakdown -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>Order Status Distribution</h3>
+                <p>Operational Status Breakdown (FACT_ORDERS)</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <canvas id="statusChart" height="180"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Summary Tables Grid -->
+<div class="grid-2">
+    <!-- Top Suppliers -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>Top Suppliers by Revenue</h3>
+                <p>Ranked by Settled Revenue Contribution</p>
+            </div>
+            <a href="{{ url_for('suppliers') }}" class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 8px;">View All</a>
+        </div>
+        <div class="card-body" style="padding: 0;">
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Supplier</th>
+                            <th>Rating</th>
+                            <th class="text-right">Orders</th>
+                            <th class="text-right">Revenue (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in top_suppliers %}
+                        <tr>
+                            <td><strong>{{ s.supplier_name }}</strong><br><small style="color:var(--text-muted);">{{ s.city }}, {{ s.state }}</small></td>
+                            <td>{{ s.rating }} / 5.0</td>
+                            <td class="text-right">{{ s.orders_fulfilled }}</td>
+                            <td class="text-right"><strong>₹{{ '{:,.2f}'.format(s.supplier_revenue) }}</strong></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Customers -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>Top Customers by Spend</h3>
+                <p>Ranked by Aggregate Spend</p>
+            </div>
+            <a href="{{ url_for('customers') }}" class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 8px;">View All</a>
+        </div>
+        <div class="card-body" style="padding: 0;">
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Customer Name</th>
+                            <th>Location</th>
+                            <th class="text-right">Orders</th>
+                            <th class="text-right">Total Spend</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in top_customers %}
+                        <tr>
+                            <td><strong>{{ c.customer_name }}</strong></td>
+                            <td>{{ c.city }}, {{ c.state }}</td>
+                            <td class="text-right">{{ c.total_orders }}</td>
+                            <td class="text-right"><strong>₹{{ '{:,.2f}'.format(c.total_spent) }}</strong></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Settled Sales Line Items -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>Recent Sales Transactions</h3>
+            <p>Verified line-item sales records</p>
+        </div>
+        <a href="{{ url_for('orders') }}" class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 8px;">Explore All Orders</a>
+    </div>
+    <div class="card-body" style="padding: 0;">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Sale ID</th>
+                        <th>Order ID</th>
+                        <th>Settlement Date</th>
+                        <th>Customer</th>
+                        <th>Product & Category</th>
+                        <th class="text-right">Qty</th>
+                        <th class="text-right">Gross Revenue</th>
+                        <th class="text-right">Net Profit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in recent_sales %}
+                    <tr>
+                        <td><code>#SL-{{ r.sale_id }}</code></td>
+                        <td>#ORD-{{ r.order_id }}</td>
+                        <td>{{ r.sale_date }}</td>
+                        <td>{{ r.customer_name }}</td>
+                        <td>{{ r.product_name }} <span class="badge">{{ r.category }}</span></td>
+                        <td class="text-right">{{ r.quantity }}</td>
+                        <td class="text-right"><strong>₹{{ '{:,.2f}'.format(r.total_amount) }}</strong></td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(r.profit) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Monthly Line Chart
+    const monthlyData = {{ monthly_sales|tojson }};
+    const mLabels = monthlyData.map(d => `${d.year}-${String(d.month).padStart(2, '0')}`);
+    const mRevs = monthlyData.map(d => d.monthly_revenue);
+    const mProfs = monthlyData.map(d => d.monthly_profit);
+
+    new Chart(document.getElementById('monthlyChart'), {
+        type: 'line',
+        data: {
+            labels: mLabels,
+            datasets: [
+                {
+                    label: 'Gross Revenue (₹)',
+                    data: mRevs,
+                    borderColor: '#2563eb',
+                    backgroundColor: 'rgba(37, 99, 235, 0.05)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.2
+                },
+                {
+                    label: 'Net Profit (₹)',
+                    data: mProfs,
+                    borderColor: '#475569',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    borderDash: [4, 4],
+                    tension: 0.2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'top' } },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#f1f5f9' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+
+    // 2. Category Doughnut
+    const catData = {{ category_sales|tojson }};
+    new Chart(document.getElementById('categoryChart'), {
+        type: 'doughnut',
+        data: {
+            labels: catData.map(d => d.category),
+            datasets: [{
+                data: catData.map(d => d.category_revenue),
+                backgroundColor: ['#1e40af', '#2563eb', '#3b82f6', '#60a5fa', '#475569', '#64748b', '#94a3b8', '#cbd5e1']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'right' } }
+        }
+    });
+
+    // 3. Top Products Bar
+    const prodData = {{ top_products|tojson }};
+    new Chart(document.getElementById('topProductsChart'), {
+        type: 'bar',
+        data: {
+            labels: prodData.map(d => d.product_name.length > 20 ? d.product_name.substr(0,18) + '...' : d.product_name),
+            datasets: [{
+                label: 'Revenue (₹)',
+                data: prodData.map(d => d.revenue),
+                backgroundColor: '#2563eb',
+                borderRadius: 2
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    grid: { color: '#f1f5f9' }
+                },
+                y: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+
+    // 4. Order Status Distribution
+    const statusData = {{ order_status|tojson }};
+    new Chart(document.getElementById('statusChart'), {
+        type: 'pie',
+        data: {
+            labels: statusData.map(d => d.order_status),
+            datasets: [{
+                data: statusData.map(d => d.status_count),
+                backgroundColor: ['#2563eb', '#475569', '#64748b', '#94a3b8', '#cbd5e1']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'right' } }
+        }
+    });
+});
+</script>
+{% endblock %}

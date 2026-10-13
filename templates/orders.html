@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block title %}Orders{% endblock %}
+{% block page_heading %}Operational Orders Ledger{% endblock %}
+{% block page_subheading %}Granular transactional records from the operational database{% endblock %}
+
+{% block top_actions %}
+<a href="{{ url_for('export_csv', dataset='orders') }}" class="btn btn-outline">Download Orders CSV</a>
+{% endblock %}
+
+{% block content %}
+<!-- Search and Filter Panel -->
+<div class="filter-panel">
+    <form method="GET" action="{{ url_for('orders') }}" class="filter-form">
+        <div class="filter-group" style="flex: 2;">
+            <label for="search">Keyword Search</label>
+            <input type="text" name="search" id="search" value="{{ search }}" placeholder="Search customer, product SKU, or supplier name...">
+        </div>
+
+        <div class="filter-group">
+            <label for="status">Fulfillment Status</label>
+            <select name="status" id="status">
+                <option value="">All Statuses</option>
+                <option value="Delivered" {% if status_filter == 'Delivered' %}selected{% endif %}>Delivered</option>
+                <option value="Shipped" {% if status_filter == 'Shipped' %}selected{% endif %}>Shipped</option>
+                <option value="Processing" {% if status_filter == 'Processing' %}selected{% endif %}>Processing</option>
+                <option value="Cancelled" {% if status_filter == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                <option value="Returned" {% if status_filter == 'Returned' %}selected{% endif %}>Returned</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="sort">Date Sorting</label>
+            <select name="sort" id="sort">
+                <option value="desc" {% if sort_dir == 'desc' %}selected{% endif %}>Newest First</option>
+                <option value="asc" {% if sort_dir == 'asc' %}selected{% endif %}>Oldest First</option>
+            </select>
+        </div>
+
+        <div class="filter-actions">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="{{ url_for('orders') }}" class="btn btn-outline">Clear</a>
+        </div>
+    </form>
+</div>
+
+<!-- Status Summary Badges Bar -->
+<div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+    <span class="badge" style="padding: 4px 8px;">Total Filtered: <strong>{{ total_records }}</strong></span>
+    {% for s in status_counts %}
+    <span class="badge badge-{{ s.order_status|lower }}" style="padding: 4px 8px;">
+        {{ s.order_status }}: <strong>{{ s.cnt }}</strong>
+    </span>
+    {% endfor %}
+</div>
+
+<!-- Orders Table Card -->
+<div class="card">
+    <div class="card-body" style="padding: 0;">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Order Date</th>
+                        <th>Customer</th>
+                        <th>Product & Category</th>
+                        <th>Supplier</th>
+                        <th class="text-right">Qty</th>
+                        <th class="text-right">Total Amount</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for o in orders %}
+                    <tr>
+                        <td><code>#ORD-{{ o.order_id }}</code></td>
+                        <td>{{ o.order_date }}</td>
+                        <td><strong>{{ o.customer_name }}</strong><br><small style="color:var(--text-muted);">{{ o.customer_city }}</small></td>
+                        <td>{{ o.product_name }}<br><small style="color:var(--text-secondary);">{{ o.category }}</small></td>
+                        <td>{{ o.supplier_name }}</td>
+                        <td class="text-right">{{ o.quantity }}</td>
+                        <td class="text-right"><strong>₹{{ '{:,.2f}'.format(o.total_amount) }}</strong></td>
+                        <td class="text-center">
+                            <span class="badge badge-{{ o.order_status|lower }}">{{ o.order_status }}</span>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 24px; color: var(--text-muted);">
+                            No matching operational orders found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Pagination Controls -->
+{% if total_pages > 1 %}
+<div class="pagination">
+    {% if page > 1 %}
+    <a href="{{ url_for('orders', page=page-1, search=search, status=status_filter, sort=sort_dir) }}">Previous</a>
+    {% endif %}
+
+    <span>Page <strong>{{ page }}</strong> of <strong>{{ total_pages }}</strong> (25 per page)</span>
+
+    {% if page < total_pages %}
+    <a href="{{ url_for('orders', page=page+1, search=search, status=status_filter, sort=sort_dir) }}">Next</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

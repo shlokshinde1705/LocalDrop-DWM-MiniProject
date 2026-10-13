@@ -1,0 +1,38 @@
+{% extends 'store_base.html' %}
+{% block title %}Suppliers{% endblock %}
+
+{% block content %}
+<div class="filter-panel">
+    <form method="GET" action="{{ url_for('store_suppliers') }}" class="filter-form">
+        <div class="filter-group" style="flex: 2;">
+            <label for="q">Search Suppliers</label>
+            <input type="text" name="q" id="q" value="{{ query }}" placeholder="Search supplier by name, city, or state...">
+        </div>
+        <div class="filter-actions">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a href="{{ url_for('store_suppliers') }}" class="btn btn-outline">Clear</a>
+        </div>
+    </form>
+</div>
+
+<div class="section-header-row">
+    <h3>Local Regional Suppliers ({{ suppliers|length }})</h3>
+</div>
+
+<div class="store-supplier-grid">
+    {% for s in suppliers %}
+    <a href="{{ url_for('store_supplier_detail', supplier_id=s.supplier_id) }}" class="store-supplier-card">
+        <div class="store-supplier-name">{{ s.supplier_name }}</div>
+        <div class="store-supplier-location">{{ s.city }}, {{ s.state }}</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto; font-size:0.80rem; border-top:1px solid var(--border-light); padding-top:10px;">
+            <span>Rating: <strong>{{ s.supplier_rating }} / 5.0</strong></span>
+            <span class="badge">{{ s.product_count }} products</span>
+        </div>
+    </a>
+    {% else %}
+    <div style="grid-column: 1 / -1; padding: 40px; text-align: center; color: var(--text-muted); background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius);">
+        No suppliers found matching your query.
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

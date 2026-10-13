@@ -1,0 +1,850 @@
+{
+  "total_products": 120,
+  "products": {
+    "1": {
+      "product_name": "Apex Pro Smart Watch",
+      "category": "Electronics",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a sleek black smartwatch with a round digital display and black silicone strap, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "2": {
+      "product_name": "Sonic Wireless Bluetooth Earbuds",
+      "category": "Electronics",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of modern white true wireless earbuds inside an open compact charging case, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "3": {
+      "product_name": "VoltMax 20000mAh Power Bank",
+      "category": "Electronics",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a black 20000mAh power bank with dual USB ports and a short charging cable, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "4": {
+      "product_name": "Crystal HD USB Webcam",
+      "category": "Electronics",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an HD USB webcam with an adjustable monitor clip mount and privacy shutter, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "5": {
+      "product_name": "Noise-Cancelling Studio Headset",
+      "category": "Electronics",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of over-ear studio noise-cancelling headphones in matte black with cushioned earcups, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "6": {
+      "product_name": "Mini Portable Bluetooth Speaker",
+      "category": "Electronics",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a compact cylindrical Bluetooth speaker with fabric mesh wrap and carrying loop, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "7": {
+      "product_name": "AeroFit Pulse Fitness Band",
+      "category": "Electronics",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a slim fitness tracker smartband with OLED color screen and dark silicone strap, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "8": {
+      "product_name": "Ultra-Slim 7-in-1 USB-C Hub",
+      "category": "Electronics",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an ultra-slim aluminum 7-in-1 USB-C multi-port hub adapter with HDMI and USB slots, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "9": {
+      "product_name": "RGB Backlit Mechanical Keyboard",
+      "category": "Electronics",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a tenkeyless mechanical computer gaming keyboard with textured keycaps, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "10": {
+      "product_name": "Silent Optical Wireless Mouse",
+      "category": "Electronics",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an ergonomic wireless optical mouse in matte graphite grey, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "11": {
+      "product_name": "Fast Wireless Charging Pad 15W",
+      "category": "Electronics",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a thin circular 15W fast wireless charging pad with LED indicator, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "12": {
+      "product_name": "Smart Wi-Fi Security Cam",
+      "category": "Electronics",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a compact white indoor Wi-Fi security smart camera with dome lens, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "13": {
+      "product_name": "Universal International Travel Adapter",
+      "category": "Electronics",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an all-in-one universal international travel power plug adapter, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "14": {
+      "product_name": "Dual-Port 65W GaN Fast Charger",
+      "category": "Electronics",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a compact 65W GaN fast wall charger plug with foldable prongs and dual USB-C ports, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "15": {
+      "product_name": "Digital Voice Recorder Pen",
+      "category": "Electronics",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a slim metallic digital voice recorder dictaphone pen with clip, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "16": {
+      "product_name": "Armor MagSafe Phone Case",
+      "category": "Mobile Accessories",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a shockproof rugged MagSafe phone case in matte black with raised camera bezel, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "17": {
+      "product_name": "Tempered Glass Screen Guard (Pack of 3)",
+      "category": "Mobile Accessories",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of three clear tempered glass smartphone screen protectors with alignment tray, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "18": {
+      "product_name": "Braided Fast Charging Type-C Cable",
+      "category": "Mobile Accessories",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a durable braided nylon USB-C fast charging cable neatly coiled with leather strap, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "19": {
+      "product_name": "Aluminum Desk Phone Stand",
+      "category": "Mobile Accessories",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a foldable aluminum desktop mobile phone stand with rubberized grip pads, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "20": {
+      "product_name": "Magnetic Dashboard Car Phone Mount",
+      "category": "Mobile Accessories",
+      "status": "dedicated_generated",
+      "file": "products/product_20.jpg",
+      "prompt": "Studio product photo of a magnetic dashboard car phone mount with a rotating 360-degree metallic ball head and adhesive base, plain light neutral grey background, studio lighting, single product, no old car interior, no steering wheel, no people, no text, no logos"
+    },
+    "21": {
+      "product_name": "Extendable Bluetooth Selfie Stick Tripod",
+      "category": "Mobile Accessories",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an extendable aluminum Bluetooth selfie stick with integrated mini tripod legs, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "22": {
+      "product_name": "Waterproof Mobile Pouch Bag",
+      "category": "Mobile Accessories",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a transparent waterproof phone pouch with secure snap and lock seal and lanyard, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "23": {
+      "product_name": "3.5mm Aux Audio Converter Cable",
+      "category": "Mobile Accessories",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a braided 3.5mm auxiliary male-to-male audio jack converter cable, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "24": {
+      "product_name": "Camera Lens Protector Glass",
+      "category": "Mobile Accessories",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of individual tempered glass camera lens protector rings for a smartphone, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "25": {
+      "product_name": "Phone Ring Grip & Kickstand",
+      "category": "Mobile Accessories",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a metallic zinc alloy phone ring holder kickstand with 360 rotation, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "26": {
+      "product_name": "Multi-Device Braided 3-in-1 Cable",
+      "category": "Mobile Accessories",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a 3-in-1 multi-device braided charging cable with Lightning, Type-C and Micro-USB tips, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "27": {
+      "product_name": "Silicone Cable Organizer Clips",
+      "category": "Mobile Accessories",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of silicone cable organizer clips pack with adhesive backing for desk cords, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "28": {
+      "product_name": "OTG USB 3.0 Adapter Plug",
+      "category": "Mobile Accessories",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a compact metallic USB 3.0 to Type-C OTG adapter dongle, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "29": {
+      "product_name": "Wireless Neckband Earphones",
+      "category": "Mobile Accessories",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of flexible silicone wireless neckband earphones with magnetic earbuds, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "30": {
+      "product_name": "Anti-Dust Mobile Speaker Mesh",
+      "category": "Mobile Accessories",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of precision fine mesh anti-dust stickers for phone speaker grilles with tweezers, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "31": {
+      "product_name": "Ergonomic Aluminum Laptop Stand",
+      "category": "Home & Office",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an adjustable ergonomic aluminum laptop cooling riser stand, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "32": {
+      "product_name": "Adjustable Eye-Care LED Desk Lamp",
+      "category": "Home & Office",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an architectural folding LED desk lamp with touch brightness controls, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "33": {
+      "product_name": "Large PU Leather Desk Mat Mouse Pad",
+      "category": "Home & Office",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a rolled dual-sided PU leather desk mat mouse pad in dark blue, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "34": {
+      "product_name": "Multi-Tier Wooden Desktop Organizer",
+      "category": "Home & Office",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a multi-tier natural wooden desktop storage organizer for letters and stationary, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "35": {
+      "product_name": "Ergonomic Memory Foam Lumbar Cushion",
+      "category": "Home & Office",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an ergonomic memory foam lumbar support back cushion for office chairs, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "36": {
+      "product_name": "Footrest Ergonomic Rocking Stool",
+      "category": "Home & Office",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an ergonomic textured rocking footrest stool for under-desk comfort, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "37": {
+      "product_name": "Aroma Diffuser Ultrasonic Humidifier",
+      "category": "Home & Office",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an ultrasonic essential oil aroma diffuser humidifier with wood grain base, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "38": {
+      "product_name": "Digital Alarm Clock with Temperature",
+      "category": "Home & Office",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a minimalist modern wooden digital LED desk alarm clock with temperature display, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "39": {
+      "product_name": "Cable Management Box Organizer",
+      "category": "Home & Office",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a sleek white cable management organizer box with bamboo lid, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "40": {
+      "product_name": "Monitor Screen Light Bar",
+      "category": "Home & Office",
+      "status": "dedicated_generated",
+      "file": "products/product_40.jpg",
+      "prompt": "Product photo of a modern USB LED monitor light bar mounted on top of a computer screen, illuminating the desk beneath, studio lighting, plain light neutral grey background, single product, no text, no logos, no people, no monitor lizard, no animal"
+    },
+    "41": {
+      "product_name": "Laptop Cooling Pad with 5 Fans",
+      "category": "Home & Office",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a laptop cooling pad stand with blue LED quiet fans and USB pass-through, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "42": {
+      "product_name": "Mini Desktop Dust Vacuum Cleaner",
+      "category": "Home & Office",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a compact cordless handheld mini desktop crumb vacuum cleaner, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "43": {
+      "product_name": "Under-Desk Headphone Hanger Mount",
+      "category": "Home & Office",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an under-desk aluminum headphone hanger mount with adhesive clamp, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "44": {
+      "product_name": "Magnetic Whiteboard with Marker Set",
+      "category": "Home & Office",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a small framed magnetic desktop whiteboard with dry erase markers and eraser, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "45": {
+      "product_name": "Wall Hanging Key & Mail Holder",
+      "category": "Home & Office",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a wall-mounted wooden entryway key rack and mail sorter shelf with metal hooks, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "46": {
+      "product_name": "Non-Slip TPE Eco Yoga Mat 6mm",
+      "category": "Fitness & Sports",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a rolled dual-tone 6mm eco-friendly TPE non-slip exercise yoga mat with strap, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "47": {
+      "product_name": "Fabric Resistance Booty Bands Set",
+      "category": "Fitness & Sports",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a set of three fabric booty resistance loop bands in gradient tones, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "48": {
+      "product_name": "Adjustable Speed Jump Rope Steel Cable",
+      "category": "Fitness & Sports",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a high-speed steel cable jump rope with ball bearings and aluminum handles, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "49": {
+      "product_name": "Push-Up Board Color-Coded 14-in-1",
+      "category": "Fitness & Sports",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a color-coded multi-position push-up board with silicone comfort handles, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "50": {
+      "product_name": "Deep Tissue Muscle Massage Gun",
+      "category": "Fitness & Sports",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a portable deep-tissue muscle percussion massage gun with interchangeable massage heads, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "51": {
+      "product_name": "Neoprene Hex Dumbbells Pair 3kg",
+      "category": "Fitness & Sports",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a pair of black hexagonal neoprene-coated 3kg hand dumbbells, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "52": {
+      "product_name": "Gym Shaker Protein Bottle with Blender",
+      "category": "Fitness & Sports",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a 700ml gym shaker protein bottle with stainless steel mixing wire whisk ball, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "53": {
+      "product_name": "Sweat-Resistant Sports Armband",
+      "category": "Fitness & Sports",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a breathable sweat-proof running phone armband sleeve with reflective trim, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "54": {
+      "product_name": "Microfiber Quick-Dry Gym Towel",
+      "category": "Fitness & Sports",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a neatly folded fast-drying microfiber gym fitness towel with storage pouch, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "55": {
+      "product_name": "High-Density Foam Roller 45cm",
+      "category": "Fitness & Sports",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a high-density textured EVA foam muscle roller for physical therapy and fitness, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "56": {
+      "product_name": "Grip Strength Trainer Hand Squeezer",
+      "category": "Fitness & Sports",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an adjustable hand grip strength trainer squeezer with resistance dial, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "57": {
+      "product_name": "Breathable Padded Weightlifting Gloves",
+      "category": "Fitness & Sports",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a pair of breathable weightlifting training gloves with wrist wrap support, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "58": {
+      "product_name": "Ab Roller Wheel with Knee Mat",
+      "category": "Fitness & Sports",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a wide dual-wheel ab roller with textured knee pad mat, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "59": {
+      "product_name": "Reflective Running Hydration Waist Belt",
+      "category": "Fitness & Sports",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an ultralight reflective hydration waist pack belt with running water bottle holster, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "60": {
+      "product_name": "Ankle Weights Set 1kg Pair",
+      "category": "Fitness & Sports",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a pair of adjustable 1kg ankle and wrist weights with secure strap closures, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "61": {
+      "product_name": "Stainless Steel Insulated Water Bottle 1L",
+      "category": "Kitchen & Dining",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a double-wall vacuum insulated stainless steel water flask 1 liter in matte finish, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "62": {
+      "product_name": "Automatic Electric Kettle 1.8L",
+      "category": "Kitchen & Dining",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a modern stainless steel and glass electric tea kettle with auto shut-off, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "63": {
+      "product_name": "Manual French Press Coffee Plunger",
+      "category": "Kitchen & Dining",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a borosilicate glass French press coffee maker plunger with stainless steel filter, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "64": {
+      "product_name": "Digital Food Kitchen Weight Scale",
+      "category": "Kitchen & Dining",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an ultra-slim digital kitchen food scale with stainless steel weighing platform, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "65": {
+      "product_name": "Silicone Cooking Utensils Set of 10",
+      "category": "Kitchen & Dining",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a set of silicone cooking utensils with natural wooden beech handles in a holder, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "66": {
+      "product_name": "Herb Scissors 5-Blade with Cover",
+      "category": "Kitchen & Dining",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of multi-blade herb culinary kitchen scissors with protective cleaning comb cover, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "67": {
+      "product_name": "Vegetable Chopper Dicer 12-in-1",
+      "category": "Kitchen & Dining",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a multi-function vegetable food chopper dicer container with interchangeable stainless blades, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "68": {
+      "product_name": "Reusable Silicone Food Storage Bags",
+      "category": "Kitchen & Dining",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of reusable airtight silicone food storage ziplock bags standing upright, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "69": {
+      "product_name": "Oil Dispenser Glass Bottle Non-Drip",
+      "category": "Kitchen & Dining",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a non-drip glass olive oil and vinegar dispenser bottle with measurement marks, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "70": {
+      "product_name": "Ceramic Coffee Mug with Wooden Lid",
+      "category": "Kitchen & Dining",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a handcrafted ceramic matte coffee mug with fitted natural wooden lid and coaster, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "71": {
+      "product_name": "Stainless Steel Bento Lunch Box",
+      "category": "Kitchen & Dining",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a three-compartment food-grade stainless steel bento lunch box with silicone seal, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "72": {
+      "product_name": "Manual Citrus Juicer Hand Squeezer",
+      "category": "Kitchen & Dining",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a heavy-duty stainless steel manual citrus juicer lemon squeezer, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "73": {
+      "product_name": "Bamboo Cutting Board Large",
+      "category": "Kitchen & Dining",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an organic bamboo wooden kitchen cutting board with juice drip groove, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "74": {
+      "product_name": "Double-Wall Glass Tumbler Pair",
+      "category": "Kitchen & Dining",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a pair of insulated clear double-wall glass coffee tumblers, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "75": {
+      "product_name": "Stainless Steel Straws Set with Brush",
+      "category": "Kitchen & Dining",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a set of reusable curved stainless steel drinking straws with cleaning nylon brush in pouch, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "76": {
+      "product_name": "Waterproof Anti-Theft Laptop Backpack",
+      "category": "Travel & Luggage",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a water-resistant anti-theft laptop backpack with hidden zippers and luggage strap, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "77": {
+      "product_name": "Memory Foam Neck Travel Pillow Set",
+      "category": "Travel & Luggage",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an ergonomic memory foam travel neck pillow with velvet cover and eye mask set, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "78": {
+      "product_name": "Packing Cubes Compression Set of 6",
+      "category": "Travel & Luggage",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a set of six travel compression packing cubes for luggage organization, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "79": {
+      "product_name": "Compact Travel Umbrella Windproof",
+      "category": "Travel & Luggage",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a compact windproof automatic folding travel umbrella with Teflon canopy, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "80": {
+      "product_name": "Digital Luggage Hanging Weight Scale",
+      "category": "Travel & Luggage",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an electronic digital hanging luggage weight scale with backlit LCD display and strap, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "81": {
+      "product_name": "Leather Passport Holder Travel Wallet",
+      "category": "Travel & Luggage",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a genuine leather travel passport wallet holder with RFID-blocking credit card slots, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "82": {
+      "product_name": "TSA Approved Cable Luggage Lock Pair",
+      "category": "Travel & Luggage",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a pair of TSA-approved flexible steel cable luggage padlocks with 3-digit combination dials, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "83": {
+      "product_name": "Foldable Lightweight Duffle Bag 35L",
+      "category": "Travel & Luggage",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a lightweight foldable waterproof duffle travel sports bag in navy blue, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "84": {
+      "product_name": "Toiletry Organizer Hanging Kit Bag",
+      "category": "Travel & Luggage",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a water-resistant hanging toiletry kit organizer bag with multi-layer mesh compartments, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "85": {
+      "product_name": "Hard EVA Electronics Organizer Case",
+      "category": "Travel & Luggage",
+      "status": "dedicated_generated",
+      "file": "products/product_85.jpg",
+      "prompt": "Professional studio product photo of a hard EVA zippered electronic accessories organizer travel case, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "86": {
+      "product_name": "Shoe Storage Travel Bags Pack of 4",
+      "category": "Travel & Luggage",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a set of four portable zippered shoe travel storage bags with transparent view window, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "87": {
+      "product_name": "RFID Blocking Slim Money Clip Wallet",
+      "category": "Travel & Luggage",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a minimalist slim RFID-blocking front pocket leather wallet with money clip, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "88": {
+      "product_name": "Travel Laundry Bag Wash Pouch",
+      "category": "Travel & Luggage",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a breathable mesh travel laundry wash bag with durable zipper for dirty clothes, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "89": {
+      "product_name": "Sleep Eye Mask 3D Contoured with Plugs",
+      "category": "Travel & Luggage",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a 3D contoured ergonomic sleep blackout eye mask with memory foam earplugs, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "90": {
+      "product_name": "Mini First Aid Emergency Pouch",
+      "category": "Travel & Luggage",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a compact red emergency first aid survival pouch with medical cross symbol and zipper, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "91": {
+      "product_name": "Sonic Rechargeable Electric Toothbrush",
+      "category": "Personal Care",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a sonic rechargeable electric toothbrush in matte black with replacement brush heads, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "92": {
+      "product_name": "Facial Jade Roller & Gua Sha Set",
+      "category": "Personal Care",
+      "status": "dedicated_generated",
+      "file": "products/product_92.jpg",
+      "prompt": "Professional studio product photo of a green jade facial roller and gua sha stone tool, plain neutral light grey background, product only, no text, no logos, no people"
+    },
+    "93": {
+      "product_name": "Cordless Hair & Beard Trimmer Set",
+      "category": "Personal Care",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a cordless precision hair and beard trimmer grooming kit with guide combs and brush, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "94": {
+      "product_name": "Ionic Hair Dryer Foldable 1400W",
+      "category": "Personal Care",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a compact folding ionic ceramic travel hair dryer in blush rose with concentrator nozzle, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "95": {
+      "product_name": "Nail Care Grooming Kit Stainless Steel",
+      "category": "Personal Care",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a stainless steel professional nail manicure and pedicure grooming set in leather travel case, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "96": {
+      "product_name": "Hot Steam Facial Sauna Vaporizer",
+      "category": "Personal Care",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a personal nano-ionic warm steam facial sauna vaporizer humidifier, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "97": {
+      "product_name": "Organic Bamboo Charcoal Floss Sticks",
+      "category": "Personal Care",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a glass jar filled with organic activated charcoal dental floss picks with natural bamboo handles, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "98": {
+      "product_name": "Compact LED Lighted Pocket Makeup Mirror",
+      "category": "Personal Care",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a compact LED illuminated folding pocket travel makeup mirror with dual magnification, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "99": {
+      "product_name": "Electric Foot Callus Dead Skin Remover",
+      "category": "Personal Care",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an electric rechargeable foot callus remover with exfoliating quartz roller heads, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "100": {
+      "product_name": "Natural Bristle Dry Body Skin Brush",
+      "category": "Personal Care",
+      "status": "dedicated_generated",
+      "file": "products/product_100.jpg",
+      "prompt": "Professional studio product photo of a round wooden dry skin body brush with natural bristles, plain neutral light grey background, product only, no text, no logos, no people"
+    },
+    "101": {
+      "product_name": "Aromatherapy Essential Oil Roll-On",
+      "category": "Personal Care",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of amber glass aromatherapy essential oil roller bottles with metal roller balls, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "102": {
+      "product_name": "Satin Silk Sleep Cap Hair Bonnet",
+      "category": "Personal Care",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a luxurious double-layer satin silk sleep bonnet cap with elastic band, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "103": {
+      "product_name": "Beard Comb & Wooden Brush Duo",
+      "category": "Personal Care",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a natural pearwood beard comb and boar bristle grooming brush duo in cotton pouch, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "104": {
+      "product_name": "Electric Heated Eyelash Curler",
+      "category": "Personal Care",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a sleek USB-rechargeable electric heated eyelash curler with silicone heating pad, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "105": {
+      "product_name": "Reusable Makeup Remover Bamboo Pads",
+      "category": "Personal Care",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a stack of soft organic bamboo cotton reusable makeup remover pads with mesh laundry bag, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "106": {
+      "product_name": "Hardcover Dotted Bullet Journal Notebook",
+      "category": "Stationery",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an A5 hardcover dotted bullet journal notebook with ribbon bookmark and elastic pen loop, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "107": {
+      "product_name": "Dual Tip Brush Pen Calligraphy Set of 12",
+      "category": "Stationery",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a set of 12 vibrant dual-tip brush marker pens with flexible brush tips and fine liners, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "108": {
+      "product_name": "Pastel Aesthetic Highlighter Pens Set of 6",
+      "category": "Stationery",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a set of six pastel aesthetic chisel-tip highlighter marker pens in soft muted tones, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "109": {
+      "product_name": "Retractable Gel Ink Pens 0.5mm Pack of 10",
+      "category": "Stationery",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a pack of ten smooth retractable 0.5mm black gel ink pens with rubber comfort grip, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "110": {
+      "product_name": "Vintage Washi Tape Decorative Rolls 10x",
+      "category": "Stationery",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a collection of ten decorative vintage Japanese washi tape paper rolls with geometric foil patterns, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "111": {
+      "product_name": "Sticky Notes Memo Cube 400 Sheets",
+      "category": "Stationery",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a multi-color cube block of 400 self-adhesive sticky notes memo sheets, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "112": {
+      "product_name": "Metal Wire Mesh Magazine Holder",
+      "category": "Stationery",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a modern black wire mesh vertical desk file and magazine storage holder rack, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "113": {
+      "product_name": "Heavy Duty Desktop Tape Dispenser",
+      "category": "Stationery",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a heavy-duty non-skid weighted desktop tape dispenser with sharp stainless cutting blade, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "114": {
+      "product_name": "Rotating Acrylic Pen Holder Stand",
+      "category": "Stationery",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a 360-degree rotating clear acrylic desk pen holder organizer with multiple compartments, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "115": {
+      "product_name": "Stapler with 1000 Staples & Remover",
+      "category": "Stationery",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a sleek desktop metal stapler with a box of standard staples and staple remover tool, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "116": {
+      "product_name": "Artisan Wooden Bookmark Handcrafted",
+      "category": "Stationery",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a handcrafted artisan natural wooden bookmark with laser engraved geometric pattern and tassel, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "117": {
+      "product_name": "Paper Clips & Binder Clamps Rose Gold Set",
+      "category": "Stationery",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a clear acrylic container with assorted rose-gold metal binder clips and paper clips, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "118": {
+      "product_name": "Mechanical Pencil Set with Refill Leads",
+      "category": "Stationery",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of an ergonomic metallic 0.5mm mechanical drafting pencil with refill polymer leads case, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "119": {
+      "product_name": "Weekly Productivity Desk Planner Pad",
+      "category": "Stationery",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of a weekly desk productivity tear-off planner notepad with checklist grid and daily columns, plain light grey background, soft shadow, no text, no logos, no people"
+    },
+    "120": {
+      "product_name": "Precision Metal Paper Craft Scissors",
+      "category": "Stationery",
+      "status": "pending_generation",
+      "file": "none",
+      "prompt": "Studio product photo of sharp precision stainless steel craft and paper scissors with soft comfort handle grips, plain light grey background, soft shadow, no text, no logos, no people"
+    }
+  },
+  "summary": {
+    "dedicated_images": 5,
+    "placeholders": 115,
+    "total": 120
+  }
+}

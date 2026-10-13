@@ -1,0 +1,163 @@
+{
+    "CUSTOMERS": {
+        "description": "Registered consumer accounts purchasing dropshipped goods across India.",
+        "columns": {
+            "customer_id": {
+                "type": "INTEGER (PK)",
+                "description": "Unique identifier for customer."
+            },
+            "customer_name": {
+                "type": "TEXT",
+                "description": "Full name of the customer."
+            },
+            "city": {
+                "type": "TEXT",
+                "description": "City of residence."
+            },
+            "state": {
+                "type": "TEXT",
+                "description": "Indian state of residence."
+            },
+            "registration_date": {
+                "type": "DATE",
+                "description": "Date account was opened."
+            }
+        }
+    },
+    "SUPPLIERS": {
+        "description": "Verified local regional manufacturers and dropshipping partners.",
+        "columns": {
+            "supplier_id": {
+                "type": "INTEGER (PK)",
+                "description": "Unique supplier identifier."
+            },
+            "supplier_name": {
+                "type": "TEXT",
+                "description": "Business or trade name."
+            },
+            "city": {
+                "type": "TEXT",
+                "description": "Fulfillment center city."
+            },
+            "state": {
+                "type": "TEXT",
+                "description": "Fulfillment center state."
+            },
+            "supplier_rating": {
+                "type": "REAL",
+                "description": "Quality score between 1.0 and 5.0."
+            }
+        }
+    },
+    "PRODUCTS": {
+        "description": "Catalog of 120 products spanning 8 standard retail categories.",
+        "columns": {
+            "product_id": {
+                "type": "INTEGER (PK)",
+                "description": "Unique product SKU."
+            },
+            "product_name": {
+                "type": "TEXT",
+                "description": "Trade title of product item."
+            },
+            "category": {
+                "type": "TEXT",
+                "description": "Merchandising category (e.g. Electronics)."
+            },
+            "supplier_id": {
+                "type": "INTEGER (FK)",
+                "description": "Associated manufacturing supplier."
+            },
+            "price": {
+                "type": "REAL",
+                "description": "Selling retail price in INR."
+            },
+            "cost_price": {
+                "type": "REAL",
+                "description": "Wholesale supplier cost in INR."
+            },
+            "stock_quantity": {
+                "type": "INTEGER",
+                "description": "Remaining available warehouse units."
+            }
+        }
+    },
+    "ORDERS": {
+        "description": "Transactional log of consumer purchase orders over a 24-month horizon.",
+        "columns": {
+            "order_id": {
+                "type": "INTEGER (PK)",
+                "description": "Order transaction serial number."
+            },
+            "customer_id": {
+                "type": "INTEGER (FK)",
+                "description": "Purchasing customer ID."
+            },
+            "product_id": {
+                "type": "INTEGER (FK)",
+                "description": "Ordered product SKU."
+            },
+            "supplier_id": {
+                "type": "INTEGER (FK)",
+                "description": "Fulfilling supplier partner."
+            },
+            "order_date": {
+                "type": "TEXT/DATE",
+                "description": "Date order placed by consumer."
+            },
+            "quantity": {
+                "type": "INTEGER",
+                "description": "Number of units ordered."
+            },
+            "order_status": {
+                "type": "TEXT",
+                "description": "Delivered, Shipped, Processing, Cancelled, Returned."
+            }
+        }
+    },
+    "SALES": {
+        "description": "Financial settlement records generated for all non-cancelled orders.",
+        "columns": {
+            "sale_id": {
+                "type": "INTEGER (PK)",
+                "description": "Financial sales invoice identifier."
+            },
+            "order_id": {
+                "type": "INTEGER (FK)",
+                "description": "Originating purchase order ID."
+            },
+            "customer_id": {
+                "type": "INTEGER (FK)",
+                "description": "Customer key."
+            },
+            "product_id": {
+                "type": "INTEGER (FK)",
+                "description": "Product key."
+            },
+            "supplier_id": {
+                "type": "INTEGER (FK)",
+                "description": "Supplier key."
+            },
+            "sale_date": {
+                "type": "DATE",
+                "description": "Settlement date of payment."
+            },
+            "quantity": {
+                "type": "INTEGER",
+                "description": "Quantity settled."
+            },
+            "unit_price": {
+                "type": "REAL",
+                "description": "Selling unit price in INR."
+            },
+            "total_amount": {
+                "type": "REAL",
+                "description": "Gross sales revenue (quantity * unit_price)."
+            },
+            "profit": {
+                "type": "REAL",
+                "description": "Net profit (total_amount - wholesale cost)."
+            }
+        }
+    }
+}

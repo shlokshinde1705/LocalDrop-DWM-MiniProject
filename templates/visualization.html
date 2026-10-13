@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+{% block title %}Data Visualization Explorer{% endblock %}
+{% block page_heading %}Data Visualization Explorer{% endblock %}
+{% block page_subheading %}Statistical distributions, box-plot metrics, scatter plots, and geographic cross-tabulations{% endblock %}
+
+{% block content %}
+<div class="grid-2">
+    <!-- 1. Order Value Distribution Histogram -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>1. Order Value Distribution (Histogram)</h3>
+                <p>Binned transaction frequencies across sales orders</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <canvas id="histChart" height="200"></canvas>
+            <div class="insight-callout">
+                <strong>Analytical Note:</strong> {{ vis.histogram.insight }}
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Scatter Plot: Unit Price vs Profit -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>2. Price vs Profit Margin Dispersion</h3>
+                <p>Scatter plot correlating retail unit price with profit realized</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <canvas id="scatterChart" height="200"></canvas>
+            <div class="insight-callout">
+                <strong>Analytical Note:</strong> Positive dispersion confirms that higher-ticket products yield proportionately higher absolute margins.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid-2">
+    <!-- 3. Stacked Bar: Category by Quarter -->
+    <div class="card" style="grid-column: 1 / -1;">
+        <div class="card-header">
+            <div>
+                <h3>3. Category Revenue Composition by Quarter</h3>
+                <p>Stacked quarterly revenue contributions across categories</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <canvas id="stackedChart" height="120"></canvas>
+            <div class="insight-callout">
+                <strong>Analytical Note:</strong> {{ vis.stacked_category.insight }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 4. Box-Plot Style Summary of Profit by Category -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>4. Five-Number Summary &amp; Profit Spread by Category</h3>
+            <p>Minimum, First Quartile (Q1), Median (Q2), Third Quartile (Q3), Maximum, and IQR</p>
+        </div>
+    </div>
+    <div class="card-body" style="padding: 0;">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th class="text-right">Minimum</th>
+                        <th class="text-right">Q1 (25th %)</th>
+                        <th class="text-right">Median (50th %)</th>
+                        <th class="text-right">Q3 (75th %)</th>
+                        <th class="text-right">Maximum</th>
+                        <th class="text-right">Mean</th>
+                        <th class="text-right">IQR Spread</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in vis.boxplot %}
+                    <tr>
+                        <td><strong>{{ b.category }}</strong></td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(b.min) }}</td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(b.q1) }}</td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(b.median) }}</td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(b.q3) }}</td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(b.max) }}</td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(b.mean) }}</td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(b.iqr) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="insight-callout" style="margin: 12px 18px 18px;">
+            <strong>Analytical Note:</strong> Electronics and Fitness &amp; Sports exhibit the widest Interquartile Range (IQR), reflecting diverse product price tiers.
+        </div>
+    </div>
+</div>
+
+<!-- 5. Geographic Revenue Heatmap Matrix -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>5. Geographic Revenue Matrix (Top States &times; Product Categories)</h3>
+            <p>Cross-tabulation of regional sales turnover</p>
+        </div>
+    </div>
+    <div class="card-body" style="padding: 0;">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>State</th>
+                        {% for cat in vis.heatmap.categories %}
+                        <th class="text-right">{{ cat }}</th>
+                        {% endfor %}
+                        <th class="text-right">State Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in vis.heatmap.rows %}
+                    <tr>
+                        <td><strong>{{ r.state }}</strong></td>
+                        {% for val in r['values'] %}
+                        <td class="text-right">
+                            ₹{{ '{:,.0f}'.format(val) }}
+                        </td>
+                        {% endfor %}
+                        <td class="text-right"><strong>₹{{ '{:,.2f}'.format(r.total) }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="insight-callout" style="margin: 12px 18px 18px;">
+            <strong>Analytical Note:</strong> Maharashtra, Karnataka, and Gujarat show the highest regional transaction density across product categories.
+        </div>
+    </div>
+</div>
+
+<!-- 6. Correlation Matrix of Numeric Attributes -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>6. Pearson Correlation Coefficient Matrix</h3>
+            <p>Pairwise linear correlation across numeric transaction attributes</p>
+        </div>
+    </div>
+    <div class="card-body" style="padding: 0;">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Variable</th>
+                        {% for col in vis.correlation.columns %}
+                        <th class="text-center">{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in vis.correlation.matrix %}
+                    <tr>
+                        <td><code>{{ row.variable }}</code></td>
+                        {% for corr in row.correlations %}
+                        <td class="text-center">
+                            {% if corr == 1.0 %}
+                            <span class="badge">1.00</span>
+                            {% elif corr >= 0.8 %}
+                            <span class="badge">+{{ corr }}</span>
+                            {% elif corr >= 0.3 %}
+                            <span>+{{ corr }}</span>
+                            {% elif corr <= -0.3 %}
+                            <span>{{ corr }}</span>
+                            {% else %}
+                            <span style="color:var(--text-muted);">{{ corr }}</span>
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="insight-callout" style="margin: 12px 18px 18px;">
+            <strong>Analytical Note:</strong> {{ vis.correlation.insight }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Histogram
+    const hist = {{ vis.histogram|tojson }};
+    new Chart(document.getElementById('histChart'), {
+        type: 'bar',
+        data: {
+            labels: hist.labels,
+            datasets: [{
+                label: 'Order Count',
+                data: hist.counts,
+                backgroundColor: '#2563eb',
+                borderRadius: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#f1f5f9' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+
+    // 2. Scatter Plot
+    const sPts = {{ vis.scatter|tojson }};
+    new Chart(document.getElementById('scatterChart'), {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Unit Price vs. Profit',
+                data: sPts.map(p => ({ x: p.x, y: p.y })),
+                backgroundColor: 'rgba(37,99,235,0.7)',
+                borderColor: '#1d4ed8',
+                borderWidth: 1,
+                pointRadius: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: { display: true, text: 'Unit Price (₹)' },
+                    beginAtZero: true,
+                    grid: { color: '#f1f5f9' }
+                },
+                y: {
+                    title: { display: true, text: 'Profit (₹)' },
+                    beginAtZero: true,
+                    grid: { color: '#f1f5f9' }
+                }
+            }
+        }
+    });
+
+    // 4. Stacked Category
+    const stk = {{ vis.stacked_category|tojson }};
+    new Chart(document.getElementById('stackedChart'), {
+        type: 'bar',
+        data: {
+            labels: stk.categories,
+            datasets: [
+                { label: 'Q1', data: stk.q1, backgroundColor: '#1e40af' },
+                { label: 'Q2', data: stk.q2, backgroundColor: '#2563eb' },
+                { label: 'Q3', data: stk.q3, backgroundColor: '#64748b' },
+                { label: 'Q4', data: stk.q4, backgroundColor: '#94a3b8' }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: { stacked: true, grid: { display: false } },
+                y: { stacked: true, beginAtZero: true, grid: { color: '#f1f5f9' } }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

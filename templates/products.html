@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}Product Catalog{% endblock %}
+{% block page_heading %}Product Catalog{% endblock %}
+{% block page_subheading %}Inventory levels, wholesale costs, and unit margins (120 SKUs){% endblock %}
+
+{% block top_actions %}
+<a href="{{ url_for('export_csv', dataset='products') }}" class="btn btn-outline">Download Products CSV</a>
+{% endblock %}
+
+{% block content %}
+<div class="filter-panel">
+    <form method="GET" action="{{ url_for('products') }}" class="filter-form">
+        <div class="filter-group" style="flex: 2;">
+            <label for="search">Product Name Search</label>
+            <input type="text" name="search" id="search" value="{{ search }}" placeholder="Search product name...">
+        </div>
+
+        <div class="filter-group">
+            <label for="category">Category Filter</label>
+            <select name="category" id="category">
+                <option value="">All Categories</option>
+                {% for c in categories %}
+                <option value="{{ c.category }}" {% if cat_filter == c.category %}selected{% endif %}>{{ c.category }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-actions">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="{{ url_for('products') }}" class="btn btn-outline">Reset</a>
+        </div>
+    </form>
+</div>
+
+<!-- Summary Badges -->
+<div style="display: flex; gap: 8px; margin-bottom: 16px; align-items: center;">
+    <span class="badge" style="padding: 4px 8px;">Active SKUs: <strong>{{ total_products }}</strong></span>
+    <span class="badge badge-low-stock" style="padding: 4px 8px;">Low Stock (&lt; 40 units): <strong>{{ low_stock_count }} items</strong></span>
+</div>
+
+<!-- Products Table -->
+<div class="card">
+    <div class="card-body" style="padding: 0;">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">Photo</th>
+                        <th>SKU ID</th>
+                        <th>Product Title</th>
+                        <th>Category</th>
+                        <th>Supplier</th>
+                        <th class="text-right">Selling Price</th>
+                        <th class="text-right">Wholesale Cost</th>
+                        <th class="text-right">Unit Profit</th>
+                        <th class="text-right">Gross Margin</th>
+                        <th class="text-center">Stock Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in products %}
+                    <tr>
+                        <td>
+                            {% set p_thumb = product_image_url(p) %}
+                            {% if p_thumb %}
+                            <img src="{{ p_thumb }}" alt="{{ p.product_name }}" loading="lazy" class="product-thumb">
+                            {% else %}
+                            <div class="product-thumb-placeholder">{{ p.category[:3] }}</div>
+                            {% endif %}
+                        </td>
+                        <td><code>#PRD-{{ p.product_id }}</code></td>
+                        <td><strong>{{ p.product_name }}</strong></td>
+                        <td><span class="badge">{{ p.category }}</span></td>
+                        <td>{{ p.supplier_name }}</td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(p.price) }}</td>
+                        <td class="text-right" style="color:var(--text-muted);">₹{{ '{:,.2f}'.format(p.cost_price) }}</td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(p.unit_profit) }}</td>
+                        <td class="text-right">{{ p.margin_pct }}%</td>
+                        <td class="text-center">
+                            {% if p.stock_quantity < 40 %}
+                            <span class="badge badge-low-stock">Low ({{ p.stock_quantity }})</span>
+                            {% else %}
+                            <span class="badge">{{ p.stock_quantity }} units</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'store_base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Storefront Hero Banner -->
+<div class="store-hero">
+    <h2>LocalDrop</h2>
+    <p><strong>Products from local suppliers</strong></p>
+    <p style="margin-top: 6px;">
+        Browse verified catalog merchandise sourced directly from independent regional manufacturers.
+        A decentralized dropshipping marketplace connecting local Indian suppliers with national demand.
+    </p>
+</div>
+
+<!-- Category Navigation Chips -->
+<div class="section-header-row">
+    <h3>Product Categories</h3>
+    <a href="{{ url_for('store_products') }}" class="btn btn-outline" style="font-size:0.75rem; padding:4px 8px;">View all</a>
+</div>
+<div class="category-chips">
+    {% for cat in categories %}
+    <a href="{{ url_for('store_products', category=cat) }}" class="category-chip">{{ cat }}</a>
+    {% endfor %}
+</div>
+
+<!-- Featured Products Section -->
+<div class="section-header-row" style="margin-top: 24px;">
+    <h3>Featured Products</h3>
+    <a href="{{ url_for('store_products') }}" class="btn btn-outline" style="font-size:0.75rem; padding:4px 8px;">Explore catalog</a>
+</div>
+<div class="store-product-grid">
+    {% for p in featured_products %}
+    {% set p_img = product_image_url(p) %}
+    <a href="{{ url_for('store_product_detail', product_id=p.product_id) }}" class="store-product-card">
+        {% if p_img %}
+        <div class="product-image-container">
+            <img src="{{ p_img }}" alt="{{ p.product_name }}" loading="lazy" class="product-image">
+        </div>
+        {% else %}
+        <div class="product-image-placeholder">
+            <span class="placeholder-badge">Photo coming soon</span>
+        </div>
+        {% endif %}
+        <div class="store-card-content">
+            <span class="store-card-category">{{ p.category }}</span>
+            <div class="store-card-title">{{ p.product_name }}</div>
+            <div class="store-card-supplier">Supplier: {{ p.supplier_name }}</div>
+            <div class="store-card-footer">
+                <span class="store-card-price">₹{{ '{:,.2f}'.format(p.price) }}</span>
+                {% if p.stock_quantity == 0 %}
+                <span class="badge badge-cancelled">Out of stock</span>
+                {% elif p.stock_quantity < 40 %}
+                <span class="badge badge-low-stock">Low stock ({{ p.stock_quantity }})</span>
+                {% else %}
+                <span class="badge badge-in-stock">In stock</span>
+                {% endif %}
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+<!-- Top Suppliers Section -->
+<div class="section-header-row" style="margin-top: 32px;">
+    <h3>Top Local Suppliers</h3>
+    <a href="{{ url_for('store_suppliers') }}" class="btn btn-outline" style="font-size:0.75rem; padding:4px 8px;">All suppliers</a>
+</div>
+<div class="store-supplier-grid">
+    {% for s in top_suppliers %}
+    <a href="{{ url_for('store_supplier_detail', supplier_id=s.supplier_id) }}" class="store-supplier-card">
+        <div class="store-supplier-name">{{ s.supplier_name }}</div>
+        <div class="store-supplier-location">{{ s.city }}, {{ s.state }}</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto; font-size:0.80rem;">
+            <span>Rating: <strong>{{ s.supplier_rating }} / 5.0</strong></span>
+            <span class="badge">{{ s.product_count }} items</span>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends 'store_base.html' %}
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="store-hero">
+    <h2>About LocalDrop</h2>
+    <p><strong>A Local Supplier Dropshipping Marketplace Platform</strong></p>
+    <p style="margin-top: 6px;">
+        LocalDrop demonstrates an end-to-end Data Warehouse Management (DWM) architecture,
+        bridging operational e-commerce transactions with dimensional business intelligence and machine learning.
+    </p>
+</div>
+
+<div class="grid-2">
+    <!-- Platform Concept -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>Platform Overview</h3>
+                <p>Decentralized regional dropshipping marketplace</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px;">
+                Traditional dropshipping platforms rely heavily on distant overseas fulfillment networks, causing long delivery cycles and high return rates.
+                <strong>LocalDrop</strong> restructures this model by connecting verified regional Indian manufacturers directly with retail channels across 12 states.
+            </p>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                The platform is separated into two synchronized environments:
+            </p>
+            <ul style="font-size: 0.85rem; color: var(--text-primary); margin: 10px 0 0 18px; line-height: 1.6;">
+                <li><strong>Public Storefront (/store):</strong> Customer-facing product catalog, category discovery, and local supplier profiles backed by the operational database (<code>operational.db</code>).</li>
+                <li><strong>Analytics Portal:</strong> Back-office dimensional warehouse (<code>warehouse.db</code>), Star &amp; Snowflake schemas, 15 analytical SQL queries, OLAP operations, and Machine Learning mining engines.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Academic Metadata -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3>Academic Project Details</h3>
+                <p>Curriculum context and project team</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="data-table" style="font-size: 0.82rem;">
+                <tbody>
+                    <tr>
+                        <td style="width: 140px; color: var(--text-muted); font-weight: 600;">Course</td>
+                        <td>Data Warehouse Management (DWM) &mdash; TE INFT, Semester V</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--text-muted); font-weight: 600;">Institute</td>
+                        <td>Vidyalankar Institute of Technology (VIT), Mumbai<br><small style="color:var(--text-secondary);">Department of Information Technology</small></td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--text-muted); font-weight: 600;">Students</td>
+                        <td>
+                            <strong>Ayush Kamble</strong> (24101C0065)<br>
+                            <strong>Shlok Shinde</strong> (24101C0063)<br>
+                            <small style="color:var(--text-secondary);">Division: INFT C | Academic Year 2026&ndash;27</small>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--text-muted); font-weight: 600;">Tech Stack</td>
+                        <td>Python 3, Flask, SQLite3, Pandas, NumPy, Scikit-learn, Mlxtend, Chart.js</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Architecture Summary -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>DWM Technical Architecture &amp; Methodology</h3>
+            <p>End-to-end data lifecycle from operational OLTP to analytical OLAP</p>
+        </div>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary" style="font-size:0.80rem;">Open Analytics Portal</a>
+    </div>
+    <div class="card-body">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; font-size: 0.82rem;">
+            <div style="border: 1px solid var(--border-color); border-radius: var(--radius); padding: 14px;">
+                <strong style="display:block; margin-bottom:4px; color:var(--primary);">1. Operational Database</strong>
+                <p style="color:var(--text-secondary);">5 relational tables (CUSTOMERS, SUPPLIERS, PRODUCTS, ORDERS, SALES) in 3NF capturing realistic dropshipping records.</p>
+            </div>
+            <div style="border: 1px solid var(--border-color); border-radius: var(--radius); padding: 14px;">
+                <strong style="display:block; margin-bottom:4px; color:var(--primary);">2. Automated ETL &amp; Cleansing</strong>
+                <p style="color:var(--text-secondary);">Deduplication, string trimming, bounds clamping, ISO date standardization, and IQR statistical outlier detection.</p>
+            </div>
+            <div style="border: 1px solid var(--border-color); border-radius: var(--radius); padding: 14px;">
+                <strong style="display:block; margin-bottom:4px; color:var(--primary);">3. Dimensional Warehouse</strong>
+                <p style="color:var(--text-secondary);">Star Schema, normalized Snowflake Schema, and Fact Constellation with conformed dimensions and analytical Data Marts.</p>
+            </div>
+            <div style="border: 1px solid var(--border-color); border-radius: var(--radius); padding: 14px;">
+                <strong style="display:block; margin-bottom:4px; color:var(--primary);">4. Data Mining &amp; ML</strong>
+                <p style="color:var(--text-secondary);">Supervised profitability classification (Decision Tree vs. Naive Bayes), K-Means clustering, and Apriori association rules.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Image Sources & Licensing Note -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>Image Sources &amp; Attribution</h3>
+            <p>Licensing and academic media attribution</p>
+        </div>
+        <span class="badge">Open License</span>
+    </div>
+    <div class="card-body">
+        <p style="font-size: 0.84rem; color: var(--text-secondary); line-height: 1.6;">
+            <strong>Image sources:</strong> Product images are generated for academic demonstration.
+            Full attribution metadata and source records are maintained in <code>exports/image_credits.csv</code>.
+        </p>
+    </div>
+</div>
+{% endblock %}

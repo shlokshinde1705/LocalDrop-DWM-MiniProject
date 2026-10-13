@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}Customers{% endblock %}
+{% block page_heading %}Customer Accounts Directory{% endblock %}
+{% block page_subheading %}Geographic distribution and lifetime spending metrics (300 Accounts){% endblock %}
+
+{% block top_actions %}
+<a href="{{ url_for('export_csv', dataset='customers') }}" class="btn btn-outline">Download Customers CSV</a>
+{% endblock %}
+
+{% block content %}
+<div class="filter-panel">
+    <form method="GET" action="{{ url_for('customers') }}" class="filter-form">
+        <div class="filter-group" style="flex: 2;">
+            <label for="search">Customer Name Search</label>
+            <input type="text" name="search" id="search" value="{{ search }}" placeholder="Search customer name...">
+        </div>
+
+        <div class="filter-group">
+            <label for="state">State Filter</label>
+            <select name="state" id="state">
+                <option value="">All States</option>
+                {% for st in states %}
+                <option value="{{ st.state }}" {% if state_filter == st.state %}selected{% endif %}>{{ st.state }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-actions">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="{{ url_for('customers') }}" class="btn btn-outline">Reset</a>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <div class="card-body" style="padding: 0;">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Customer ID</th>
+                        <th>Full Name</th>
+                        <th>City & State</th>
+                        <th>Registration Date</th>
+                        <th class="text-right">Total Orders</th>
+                        <th class="text-right">Lifetime Spend</th>
+                        <th class="text-right">Profit Contribution</th>
+                        <th class="text-center">Segment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in customers %}
+                    <tr>
+                        <td><code>#CST-{{ c.customer_id }}</code></td>
+                        <td><strong>{{ c.customer_name }}</strong></td>
+                        <td>{{ c.city }}, {{ c.state }}</td>
+                        <td>{{ c.registration_date }}</td>
+                        <td class="text-right">{{ c.total_orders }}</td>
+                        <td class="text-right"><strong>₹{{ '{:,.2f}'.format(c.total_spent) }}</strong></td>
+                        <td class="text-right">₹{{ '{:,.2f}'.format(c.total_profit_contributed) }}</td>
+                        <td class="text-center">
+                            {% if c.total_spent >= 35000 %}
+                            <span class="badge">Tier 1</span>
+                            {% elif c.total_spent >= 15000 %}
+                            <span class="badge">Tier 2</span>
+                            {% else %}
+                            <span class="badge">Tier 3</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% if total_pages > 1 %}
+<div class="pagination">
+    {% if page > 1 %}
+    <a href="{{ url_for('customers', page=page-1, search=search, state=state_filter) }}">Previous</a>
+    {% endif %}
+
+    <span>Page <strong>{{ page }}</strong> of <strong>{{ total_pages }}</strong> (25 per page)</span>
+
+    {% if page < total_pages %}
+    <a href="{{ url_for('customers', page=page+1, search=search, state=state_filter) }}">Next</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
